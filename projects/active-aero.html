@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Active Aerodynamics Study | Surya Ramachandran</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f0c;
+      --surface: #101510;
+      --surface2: #172019;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8c97a;
+      --accent2: #5aab6e;
+      --text: #e4ebe5;
+      --muted: #778a7a;
+      --tag-bg: rgba(90,171,110,0.12);
+      --tag-color: #5aab6e;
+      --tag-border: rgba(90,171,110,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(11,15,12,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--accent);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 10rem 4rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 80% 40%, rgba(90,171,110,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 40% at 10% 80%, rgba(232,201,122,0.05) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 20%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 860px; }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent2); }
+    .breadcrumb span { color: var(--border); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-color);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px; padding: 0.25rem 0.65rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1.08; letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent2); }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted);
+      line-height: 1.8; max-width: 680px;
+      margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      font-size: 0.85rem; color: var(--muted);
+    }
+    .hero-meta span strong { color: var(--text); display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.2rem; }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 4rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .stat-item {
+      background: var(--surface2);
+      padding: 2rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.4rem; color: var(--accent);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.82rem; color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 5rem 4rem; }
+    .content-section { margin-bottom: 4rem; }
+    .content-section:last-child { margin-bottom: 0; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-eyebrow::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--accent);
+    }
+    .content-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem; margin-bottom: 1.25rem;
+      line-height: 1.2;
+    }
+    .content-section p {
+      color: var(--muted); line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section p strong { color: var(--text); }
+
+    /* ── FIGURES ── */
+    .figure-block {
+      margin: 2.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .figure-block img {
+      width: 100%; display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .figure-caption {
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem; color: var(--muted);
+      line-height: 1.5;
+    }
+    .figure-caption strong { color: var(--accent); }
+
+    /* ── FIGURES GRID (2-up) ── */
+    .figures-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+
+    /* ── CODE SNIPPET ── */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .code-header span { color: var(--accent2); }
+    .code-block pre {
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #c8d8c8;
+    }
+    .code-block .c { color: var(--muted); } /* comments */
+    .code-block .k { color: var(--accent); } /* keywords */
+    .code-block .v { color: var(--accent2); } /* variables */
+
+    /* ── FINDINGS LIST ── */
+    .findings {
+      display: flex; flex-direction: column; gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .finding-item {
+      display: flex; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .finding-icon {
+      font-size: 1.3rem; flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .finding-text h4 {
+      font-size: 0.95rem; font-weight: 600;
+      margin-bottom: 0.25rem; color: var(--text);
+    }
+    .finding-text p {
+      font-size: 0.85rem; color: var(--muted);
+      line-height: 1.6; margin: 0;
+    }
+
+    /* ── DOWNLOADS ── */
+    .downloads {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    .downloads h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.4rem;
+    }
+    .downloads p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .download-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 7px;
+      font-size: 0.88rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .download-btn.primary { background: var(--accent); color: #0b0f0c; }
+    .download-btn.primary:hover { background: #f0d890; transform: translateY(-1px); }
+    .download-btn.secondary {
+      background: transparent; color: var(--accent2);
+      border: 1px solid var(--tag-border);
+    }
+    .download-btn.secondary:hover { background: var(--tag-bg); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .page-footer a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; transition: color 0.2s;
+    }
+    .page-footer a:hover { color: var(--accent2); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .stats-row { padding: 2rem 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .content { padding: 3rem 1.5rem; }
+      .figures-grid { grid-template-columns: 1fr; }
+      .page-footer { padding: 1.5rem; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">SR</a>
+    <a href="../index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#projects">Projects</a>
+        <span>/</span>
+        Active Aerodynamics Study
+      </div>
+      <div class="hero-tags">
+        <span class="tag">MATLAB</span>
+        <span class="tag">Vehicle Dynamics</span>
+        <span class="tag">Aerodynamics</span>
+        <span class="tag">Simulation</span>
+        <span class="tag">Solo Project</span>
+      </div>
+      <h1>Active Aerodynamics &<br><em>Vehicle Performance</em> Modeling</h1>
+      <p class="hero-sub">
+        A MATLAB-based simulation study investigating the quantitative effects of active
+        aerodynamic systems on straight-line performance, cornering behavior, tire loading,
+        and fuel efficiency — using the 2014 McLaren P1 as the test case.
+      </p>
+      <div class="hero-meta">
+        <span><strong>Date</strong>October 2024</span>
+        <span><strong>Course</strong>Road Vehicle Dynamics, UB</span>
+        <span><strong>Vehicle</strong>2014 McLaren P1</span>
+        <span><strong>Tools</strong>MATLAB</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row fade-up">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">+18 km/h</div>
+        <div class="stat-label">Top speed gain in 30 seconds<br>with active aero enabled</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">~50 m</div>
+        <div class="stat-label">Extra distance covered<br>in the same 30-second run</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">1.6 L</div>
+        <div class="stat-label">Fuel saved over<br>a 30-lap race distance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Overview</div>
+      <h2>What This Project Is About</h2>
+      <p>
+        Active aerodynamics refers to movable body components that adapt in real time to
+        manipulate airflow around a vehicle — reducing drag on straights, increasing downforce
+        through corners. The 2014 McLaren P1 was chosen as the test vehicle because it was
+        built from the factory with an active rear wing system, providing documented,
+        reliable data to anchor the simulations rather than relying on estimates alone.
+      </p>
+      <p>
+        The goal was to quantify the performance delta between the P1's two aerodynamic
+        states — <strong>stock mode</strong> (passive, higher drag) and <strong>active aero mode</strong>
+        (wing deployed, lower drag coefficient) — across three areas: straight-line
+        acceleration, cornering and tire behavior, and fuel consumption.
+      </p>
+    </div>
+
+    <!-- METHODOLOGY -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Methodology</div>
+      <h2>How the Simulations Were Built</h2>
+      <p>
+        All simulations were written from scratch in MATLAB. Vehicle parameters —
+        mass, frontal area, drag coefficients, lift coefficient — were sourced directly
+        from McLaren's published specifications and automotive catalogues, with clearly
+        documented assumptions where real data was unavailable.
+      </p>
+      <p>
+        Straight-line dynamics were modeled using a forward Euler integration loop,
+        stepping through time at 1ms intervals to track velocity and position under
+        applied traction and aerodynamic drag. Cornering analysis used lateral force
+        and load transfer equations to model how downforce from active aero redistributes
+        normal loads across the tires. Fuel consumption was derived from the power
+        required to overcome aerodynamic and rolling resistance forces at each timestep.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          MATLAB <span>Euler Integration Loop — Straight-Line Dynamics</span>
+        </div>
+        <pre><span class="c">% Acceleration functions for each mode</span>
+<span class="v">a_stock</span> = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
+<span class="v">a_act</span>   = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd_act</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
+
+<span class="c">% Forward Euler integration over 30 seconds at dt = 0.001s</span>
+<span class="k">for</span> k = 2:<span class="v">N</span>
+    <span class="c">% Stock mode</span>
+    <span class="v">v_stock</span>(k) = <span class="v">v_stock</span>(k-1) + <span class="v">a_stock</span>(<span class="v">v_stock</span>(k-1)) * <span class="v">dt</span>;
+    <span class="v">x_stock</span>(k) = <span class="v">x_stock</span>(k-1) + <span class="v">v_stock</span>(k-1) * <span class="v">dt</span>;
+
+    <span class="c">% Active aero mode</span>
+    <span class="v">v_act</span>(k) = <span class="v">v_act</span>(k-1) + <span class="v">a_act</span>(<span class="v">v_act</span>(k-1)) * <span class="v">dt</span>;
+    <span class="v">x_act</span>(k) = <span class="v">x_act</span>(k-1) + <span class="v">v_act</span>(k-1) * <span class="v">dt</span>;
+<span class="k">end</span></pre>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Results</div>
+      <h2>What the Simulations Showed</h2>
+
+      <p>
+        The results were split across three areas. Each told a consistent story:
+        active aero delivers meaningful, quantifiable gains — not just in outright speed,
+        but in how the car manages grip and energy over a full race distance.
+      </p>
+
+      <div class="figure-block">
+        <!-- Replace src with: ../assets/figure_velocity.png once uploaded to your repo -->
+        <img src="../assets/figure_velocity.png" alt="Velocity vs Time — Stock Mode vs Active Aero Mode">
+        <div class="figure-caption">
+          <strong>Fig 1 — Velocity vs Time.</strong> Over a 30-second straight-line run from a rolling start,
+          the active aero mode reaches approximately 95 m/s versus 90 m/s in stock mode —
+          a gain of ~18 km/h driven entirely by the reduction in drag coefficient from 0.34 to 0.28.
+        </div>
+      </div>
+
+      <div class="figure-block">
+        <img src="../assets/figure_normal_load.png" alt="Outer Tire Normal Load vs Velocity During Cornering">
+        <div class="figure-caption">
+          <strong>Fig 2 — Outer Tire Normal Load During Cornering.</strong> The downforce generated
+          by the active wing increases the normal load on the outer tires at speed, growing
+          the gap between modes as velocity rises. At 70 m/s, the active aero mode produces
+          roughly 10 kN more normal load on the outer tires — translating directly to increased
+          cornering grip.
+        </div>
+      </div>
+
+      <div class="figure-block">
+        <img src="../assets/figure_fuel.png" alt="Cumulative Fuel Consumption vs Time">
+        <div class="figure-caption">
+          <strong>Fig 3 — Cumulative Fuel Consumption.</strong> The reduced aerodynamic load means
+          the engine expends less energy fighting drag. Over a quarter-mile run the saving is
+          small (~5 mL), but extrapolated to a 5 km lap and scaled to 30 laps, active aero
+          saves approximately <strong>1.6 litres</strong> of fuel over a race distance — before
+          accounting for the compounding effect of carrying less fuel weight.
+        </div>
+      </div>
+    </div>
+
+    <!-- FINDINGS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Key Findings</div>
+      <h2>Conclusions</h2>
+
+      <div class="findings">
+        <div class="finding-item">
+          <div class="finding-icon">🏎️</div>
+          <div class="finding-text">
+            <h4>Straight-Line Performance</h4>
+            <p>Reducing the drag coefficient from 0.34 to 0.28 resulted in a consistent
+            speed advantage that widened over time — reaching ~18 km/h at the 30-second mark.
+            The engine's power budget is freed up as drag decreases, compounding the gain.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔄</div>
+          <div class="finding-text">
+            <h4>Cornering & Tire Grip</h4>
+            <p>Active aero generates additional downforce at speed, increasing normal loads on
+            both inner and outer tires. Slip angle analysis confirmed that this translates
+            to improved cornering grip — tires in active aero mode maintain higher slip angles
+            at velocity, indicating greater lateral force capacity.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">⛽</div>
+          <div class="finding-text">
+            <h4>Fuel Efficiency</h4>
+            <p>Less aerodynamic resistance means less power required at any given speed.
+            The simulation found fuel savings of ~56 mL per lap, accumulating to 1.6 L
+            over 30 laps — a non-trivial gain in a motorsport context where every gram
+            of fuel saved is also a gram less to carry.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔬</div>
+          <div class="finding-text">
+            <h4>Limitations & Future Work</h4>
+            <p>The study relied on publicly available specifications and documented assumptions
+            where data was unavailable. Given more resources, CFD simulation and Pacejka
+            Magic Formula tire modeling would produce significantly more detailed results —
+            particularly for the tire compound analysis section.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="downloads fade-up">
+      <h3>Project Materials</h3>
+      <p>Full report and source code available below. The report is typeset in LaTeX; the code is fully commented MATLAB.</p>
+      <div class="download-links">
+        <!-- Replace # with your actual PDF link when ready -->
+        <a href="#" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
+        <!-- Replace # with your GitHub repo URL when ready -->
+        <a href="#" target="_blank" class="download-btn secondary">💻 &nbsp;View Code on GitHub</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE FOOTER -->
+  <div class="page-footer">
+    <a href="../index.html#projects">← Back to all projects</a>
+    <a href="../index.html#contact">Get in touch →</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
