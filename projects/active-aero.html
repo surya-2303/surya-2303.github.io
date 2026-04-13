@@ -405,10 +405,91 @@
         required to overcome aerodynamic and rolling resistance forces at each timestep.
       </p>
 
-      <div class="code-block">
+<div class="code-block">
         <div class="code-header">
-          MATLAB <span>Euler Integration Loop — Straight-Line Dynamics</span>
+          MATLAB <span>Full Simulation Code</span>
         </div>
+        <pre style="max-height: 500px; overflow-y: auto;"><span class="c">%% RVD Research Project Final Report</span>
+<span class="c">% Surya Ramachandran</span>
+
+<span class="c">%% Vehicle and Environment Parameters</span>
+<span class="v">m</span> = 1490+70;        <span class="c">% kerb weight + driver [kg]</span>
+<span class="v">g</span> = 9.81;            <span class="c">% acceleration due to gravity [m/s²]</span>
+<span class="v">Width</span> = 1.946;       <span class="c">% width of car [m]</span>
+<span class="v">Height</span> = 1.188;      <span class="c">% height of car [m]</span>
+<span class="v">A</span> = <span class="v">Width</span>*<span class="v">Height</span>;    <span class="c">% frontal area [m²]</span>
+
+<span class="v">rho</span> = 1.293;         <span class="c">% air density [kg/m³]</span>
+<span class="v">cd_act</span> = 0.28;       <span class="c">% drag coefficient, active mode</span>
+<span class="v">cd</span> = 0.34;           <span class="c">% drag coefficient, stock mode</span>
+<span class="v">cl_act</span> = 0.6;        <span class="c">% lift coefficient, active mode (assumed)</span>
+<span class="v">fr</span> = 0.015;          <span class="c">% rolling resistance coefficient (assumed)</span>
+<span class="v">Fxr</span> = 4000;          <span class="c">% traction force rear [N]</span>
+<span class="v">Fxf</span> = 2000;          <span class="c">% traction force front [N]</span>
+<span class="v">v</span> = linspace(0,70,500); <span class="c">% velocity range [m/s]</span>
+
+<span class="c">%% Straight-Line Properties</span>
+<span class="v">dt</span> = 0.001;  <span class="v">tf</span> = 30;
+<span class="v">t</span> = (0:<span class="v">dt</span>:<span class="v">tf</span>);  <span class="v">N</span> = length(<span class="v">t</span>);
+
+<span class="v">x_stock</span> = zeros(1,<span class="v">N</span>);  <span class="v">v_stock</span> = zeros(1,<span class="v">N</span>);
+<span class="v">x_act</span>   = zeros(1,<span class="v">N</span>);  <span class="v">v_act</span>   = zeros(1,<span class="v">N</span>);
+<span class="v">v_stock</span>(1) = 20;  <span class="v">v_act</span>(1) = 20;  <span class="c">% rolling start [m/s]</span>
+
+<span class="v">a_stock</span> = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
+<span class="v">a_act</span>   = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd_act</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
+
+<span class="k">for</span> k = 2:<span class="v">N</span>
+    <span class="v">v_stock</span>(k) = <span class="v">v_stock</span>(k-1) + <span class="v">a_stock</span>(<span class="v">v_stock</span>(k-1))*<span class="v">dt</span>;
+    <span class="v">x_stock</span>(k) = <span class="v">x_stock</span>(k-1) + <span class="v">v_stock</span>(k-1)*<span class="v">dt</span>;
+    <span class="v">v_act</span>(k)   = <span class="v">v_act</span>(k-1)   + <span class="v">a_act</span>(<span class="v">v_act</span>(k-1))*<span class="v">dt</span>;
+    <span class="v">x_act</span>(k)   = <span class="v">x_act</span>(k-1)   + <span class="v">v_act</span>(k-1)*<span class="v">dt</span>;
+<span class="k">end</span>
+
+<span class="v">quarter_mile</span> = 402.336;
+[~,<span class="v">idx_stock</span>] = min(abs(<span class="v">x_stock</span>-<span class="v">quarter_mile</span>));
+[~,<span class="v">idx_act</span>]   = min(abs(<span class="v">x_act</span>-<span class="v">quarter_mile</span>));
+
+<span class="c">%% Cornering and Tire Properties</span>
+<span class="v">Fz</span>     = <span class="v">m</span>*<span class="v">g</span>*ones(size(<span class="v">v</span>));
+<span class="v">df_act</span> = 0.5*<span class="v">rho</span>*<span class="v">cl_act</span>*<span class="v">A</span>.*(<span class="v">v</span>.^2);
+<span class="v">Fz_act</span> = <span class="v">Fz</span>+<span class="v">df_act</span>;
+
+<span class="v">Fy</span>     = 0.85*<span class="v">Fz</span>    .*(1-0.0001*<span class="v">v</span>);
+<span class="v">Fy_act</span> = 0.85*<span class="v">Fz_act</span>.*(1+0.00005*<span class="v">v</span>);
+<span class="v">alpha</span>     = atan(<span class="v">Fy</span>./<span class="v">Fz</span>);
+<span class="v">alpha_act</span> = atan(<span class="v">Fy_act</span>./<span class="v">Fz_act</span>);
+
+<span class="v">h_CG</span> = 0.5;  <span class="v">tw</span> = 1.6;  <span class="v">cornering_radius</span> = 50;
+<span class="v">a_y</span>      = (<span class="v">v</span>.^2)/<span class="v">cornering_radius</span>;
+<span class="v">delta_Fz</span> = (<span class="v">m</span>.*<span class="v">a_y</span>.*<span class="v">h_CG</span>)./<span class="v">tw</span>;
+
+<span class="v">Fz_outer_stock</span> = <span class="v">Fz</span>    +<span class="v">delta_Fz</span>/2;
+<span class="v">Fz_inner_stock</span> = <span class="v">Fz</span>    -<span class="v">delta_Fz</span>/2;
+<span class="v">Fz_outer_act</span>   = <span class="v">Fz_act</span>+<span class="v">delta_Fz</span>/2;
+<span class="v">Fz_inner_act</span>   = <span class="v">Fz_act</span>-<span class="v">delta_Fz</span>/2;
+
+<span class="c">%% Fuel Consumption</span>
+<span class="v">Fuel_stock</span> = zeros(1,<span class="v">N</span>);
+<span class="v">Fuel_act</span>   = zeros(1,<span class="v">N</span>);
+<span class="v">eff</span> = 0.3;  <span class="v">fuel_energy_density</span> = 42.5e6;
+
+<span class="k">for</span> k = 2:<span class="v">N</span>
+    <span class="v">P_stock</span> = (0.5*<span class="v">rho</span>*<span class="v">cd</span>    *<span class="v">A</span>*<span class="v">v_stock</span>(k-1)^3)+(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>*<span class="v">v_stock</span>(k-1));
+    <span class="v">P_act</span>   = (0.5*<span class="v">rho</span>*<span class="v">cd_act</span>*<span class="v">A</span>*<span class="v">v_act</span>(k-1)^3)  +(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>*<span class="v">v_act</span>(k-1));
+    <span class="v">Fuel_stock</span>(k) = <span class="v">Fuel_stock</span>(k-1)+(<span class="v">P_stock</span>/(<span class="v">eff</span>*<span class="v">fuel_energy_density</span>))*<span class="v">dt</span>;
+    <span class="v">Fuel_act</span>(k)   = <span class="v">Fuel_act</span>(k-1)  +(<span class="v">P_act</span>  /(<span class="v">eff</span>*<span class="v">fuel_energy_density</span>))*<span class="v">dt</span>;
+<span class="k">end</span>
+
+<span class="v">Fuel_quarter_stock</span> = <span class="v">Fuel_stock</span>(<span class="v">idx_stock</span>);
+<span class="v">Fuel_quarter_act</span>   = <span class="v">Fuel_act</span>(<span class="v">idx_act</span>);
+<span class="v">lap_distance</span> = 5000;
+<span class="v">Fuel_savings_per_lap</span>  = (<span class="v">Fuel_quarter_stock</span>-<span class="v">Fuel_quarter_act</span>)/<span class="v">quarter_mile</span>*<span class="v">lap_distance</span>;
+<span class="v">Total_fuel_savings</span>    = <span class="v">Fuel_savings_per_lap</span>*30;
+
+fprintf(<span class="c">'Fuel saved per lap: %.3f L\n'</span>, <span class="v">Fuel_savings_per_lap</span>);
+fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class="v">Total_fuel_savings</span>);</pre>
+      </div>
         <pre><span class="c">% Acceleration functions for each mode</span>
 <span class="v">a_stock</span> = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
 <span class="v">a_act</span>   = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd_act</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
