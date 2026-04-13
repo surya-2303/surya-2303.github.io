@@ -442,7 +442,9 @@
       <p>
         The question this project set out to answer was this: <strong>can the inspection
         and replacement process be fully automated</strong> using a vision detection
-        system connected to a PLC controlled tool changer?
+        system connected to a PLC controlled tool changer? 
+        This project was completed in collaboration with a fellow graduate student,
+        with the PLC logic and system integration developed jointly.
       </p>
     </div>
 
@@ -586,7 +588,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
       <h2>Automating the Replacement sequence</h2>
       <p>
         Once the vision module outputs a "Tool Worn" signal, the PLC takes over.
-        The ladder logic program — written in OpenPLC — coordinates the full
+        The ladder logic program was written in OpenPLC. It coordinates the full
         tool-change sequence across 9 rungs, handling everything from halting
         the machining cycle to resuming operation with a fresh tool.
       </p>
@@ -594,9 +596,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
         A sensor adjacent to the CNC machine detects the incoming replacement tool
         and triggers a timed insertion delay, ensuring the tool reaches its slot
         rather than stopping short. An alarm light notifies the operator when the
-        new-tool palette runs low — the only human intervention the system requires.
-        This project was completed in collaboration with <strong>Karan Keshav</strong>,
-        with the PLC logic and system integration developed jointly.
+        new-tool palette runs low. This is the only human intervention the system requires.
       </p>
 
       <div class="figure-block light-diagram">
