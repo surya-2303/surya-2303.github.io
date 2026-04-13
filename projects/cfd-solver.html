@@ -326,33 +326,13 @@
       <h1>2D Incompressible<br><em>Navier-Stokes Solver</em></h1>
       <p class="hero-sub">
         A from-scratch Python implementation of a 2D incompressible flow solver
-        using the projection method formulation of the Navier-Stokes equations —
-        validated against the analytical solution for plane Poiseuille flow and
-        applied to lid-driven cavity simulation at Re = 50.
+        using the projection method formulation of the Navier-Stokes equations
+        validated against the analytical solution for plane Poiseuille flow, and
+        applied to a lid-driven cavity simulation at Re = 50.
       </p>
       <div class="hero-meta">
         <span><strong>Date</strong>March – April 2025</span>
-        <span><strong>Course</strong>Computational Fluid Mechanics, UB</span>
-        <span><strong>Language</strong>Python</span>
-        <span><strong>Libraries</strong>NumPy, Matplotlib</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- STATS ROW -->
-  <div class="stats-row fade-up">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-value">10⁻¹³</div>
-        <div class="stat-label">Velocity L2 error at N=40 —<br>near machine precision</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">3,276</div>
-        <div class="stat-label">Iterations to convergence<br>for lid-driven cavity at Re=50</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">4</div>
-        <div class="stat-label">Grid resolutions tested<br>in convergence study</div>
+        <span><strong>Tools</strong>Python, CFD, FEA</span>
       </div>
     </div>
   </div>
@@ -362,10 +342,9 @@
 
     <!-- OVERVIEW -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Overview</div>
-      <h2>Building a CFD Solver From the Ground Up</h2>
+      <h2>Overview</h2>
       <p>
-        Most CFD work happens inside commercial packages — ANSYS, OpenFOAM, Fluent.
+        Most CFD work happens inside commercial packages like ANSYS, OpenFOAM, and Fluent.
         These tools are powerful, but they abstract away the numerical machinery
         entirely. This project took the opposite approach: implementing a 2D
         incompressible Navier-Stokes solver in Python from first principles, with
@@ -373,24 +352,23 @@
         visualization.
       </p>
       <p>
-        The solver uses the <strong>projection method</strong> — a widely-used
-        fractional-step scheme that decouples the velocity and pressure updates at
+        The solver uses the projection method, a widely-used
+        fractional step scheme that decouples the velocity and pressure updates at
         each timestep. The velocity field is first advanced ignoring the pressure
         constraint, then projected onto a divergence-free space by solving a Poisson
         equation for pressure. This approach is computationally efficient and
         well-suited to incompressible flow on structured grids.
       </p>
       <p>
-        Two test cases were implemented: a <strong>grid convergence study</strong>
+        Two test cases were implemented: a grid convergence study
         against the analytical solution for plane Poiseuille flow, and a
-        <strong>lid-driven cavity simulation</strong> at Reynolds number 50 to
+        lid-driven cavity simulation at Reynolds number 50 to
         demonstrate unsteady vorticity development through to steady state.
       </p>
     </div>
 
     <!-- FORMULATION -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Formulation</div>
       <h2>The Mathematics Behind the Solver</h2>
       <p>
         The starting point is the non-dimensionalized incompressible Navier-Stokes
@@ -429,8 +407,7 @@
 
     <!-- RESULTS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Results</div>
-      <h2>Validation and Flow Simulation</h2>
+      <h2>Results</h2>
       <p>
         The solver was validated in two stages. First, the grid convergence study
         compared numerical velocity and pressure profiles against the Poiseuille
@@ -447,7 +424,7 @@
             <strong>Fig 1 — Grid Convergence.</strong> Velocity error (blue) reaches
             near machine precision (~10⁻¹³) across all grid resolutions, confirming
             the solver matches the analytical Poiseuille solution essentially exactly.
-            The pressure error (orange) remaining flat at ~1.0 is expected — the
+            The pressure error (orange) remaining flat at ~1.0 is expected since the
             forward-integration pressure scheme is first-order and does not benefit
             from grid refinement in the same way.
           </div>
@@ -459,7 +436,7 @@
             <strong>Fig 2 — Lid-Driven Cavity (Re=50).</strong> Steady-state vorticity
             contours after convergence at 3,276 iterations. High positive vorticity
             concentrates along the moving lid (top), while the recirculation structure
-            develops through the cavity interior — consistent with established benchmark
+            develops through the cavity interior. This is consistent with established benchmark
             results for this Reynolds number.
           </div>
         </div>
@@ -469,24 +446,19 @@
         The flat pressure error warrants a note: this is not a solver failure.
         The pressure is computed via simple forward integration from a single
         boundary condition, which is inherently first-order and accumulates
-        error regardless of grid spacing. The velocity solver, which uses a
-        tridiagonal finite-difference system solved exactly via
-        <strong>numpy.linalg.solve</strong>, achieves spectral-level accuracy
-        because the Poiseuille profile is a smooth polynomial — the discretization
-        error is effectively zero for this case.
+        error regardless of grid spacing. 
       </p>
     </div>
 
     <!-- METHODOLOGY / CODE -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Implementation</div>
-      <h2>How the Solver Is Structured</h2>
+      <h2>Implementation</h2>
       <p>
-        The code is split into two self-contained scripts. The first handles the
-        convergence study — building the tridiagonal system for the Poiseuille
-        velocity profile at each grid resolution and computing L2 errors against
-        the analytical solution. The second implements the full time-marching
-        vorticity-streamfunction solver for the lid-driven cavity.
+        The code is split into two scripts. The first handles the
+        convergence study, building the system for the Poiseuille
+        velocity profile at each grid resolution and cmoparing L2 errors against
+        the analytical solution. The second implements the time marching
+        vorticity streamfunction solver for the lid-driven cavity.
       </p>
 
       <div class="code-block">
@@ -600,15 +572,14 @@ U=1  <span class="c"># lid velocity</span>
 
     <!-- FINDINGS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Key Findings</div>
       <h2>What This Project Demonstrates</h2>
       <div class="findings">
         <div class="finding-item">
           <div class="finding-icon">✅</div>
           <div class="finding-text">
             <h4>Solver Accuracy</h4>
-            <p>Velocity profiles match the Poiseuille analytical solution to near
-            machine precision across all tested grid resolutions — confirming the
+            <p>Velocity profiles match the Poiseuille analytical solution precisely
+              across all tested grid resolutions, confirming the
             finite-difference discretization and boundary condition implementation
             are correct.</p>
           </div>
@@ -626,9 +597,8 @@ U=1  <span class="c"># lid velocity</span>
           <div class="finding-icon">🔢</div>
           <div class="finding-text">
             <h4>Numerical Insight</h4>
-            <p>The divergence between velocity and pressure convergence behavior —
-            machine-precision accuracy for velocity versus first-order pressure — is
-            a direct consequence of the chosen numerical schemes, not a solver defect.
+            <p>The divergence between velocity and pressure convergence behavior is
+            a direct result of the chosen numerical schemes, not a solver defect.
             Understanding this distinction is central to CFD code validation.</p>
           </div>
         </div>
@@ -648,12 +618,10 @@ U=1  <span class="c"># lid velocity</span>
     <!-- DOWNLOADS -->
     <div class="downloads fade-up">
       <h3>Project Materials</h3>
-      <p>Full report and Python source code available below.</p>
+      <p>Full report available below.</p>
       <div class="download-links">
         <!-- Replace with your actual PDF path -->
-        <a href="../assets/cfd-solver-report.pdf" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
-        <!-- Replace with your GitHub repo URL or remove if not hosting separately -->
-        <a href="#" class="download-btn secondary">💻 &nbsp;View Code on GitHub</a>
+        <a href="../assets/cfd-solver-report.pdf" class="download-btn primary">📄 &nbsp;View Report (PDF)</a>
       </div>
     </div>
 
