@@ -399,13 +399,12 @@
         <h1>Automated Tool Wear<br><em>Detection & Replacement</em></h1>
         <p class="hero-sub">
           A conceptual system integrating computer vision and PLC ladder logic
-          to automatically detect cutting-tool wear and trigger a replacement
-          sequence in CNC machining operations — eliminating the need for
+          to automatically detect cutting tool wear and trigger a replacement
+          sequence in CNC machining operations, thus eliminating the need for
           manual inspection entirely.
         </p>
         <div class="hero-meta">
           <span><strong>Date</strong>November 2025</span>
-          <span><strong>Course</strong>MAE 564, UB</span>
           <span><strong>Tools</strong>MATLAB, PLC</span>
         </div>
       </div>
@@ -427,53 +426,33 @@
     </div>
   </div>
 
-  <!-- STATS ROW -->
-  <div class="stats-row fade-up">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-value">9</div>
-        <div class="stat-label">PLC rungs controlling<br>the full replacement sequence</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">0</div>
-        <div class="stat-label">Manual inspection steps<br>required during operation</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">2</div>
-        <div class="stat-label">Integrated systems —<br>computer vision + PLC control</div>
-      </div>
-    </div>
-  </div>
-
   <!-- CONTENT -->
   <div class="content">
 
     <!-- PROBLEM -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">The Problem</div>
-      <h2>Why Manual Tool Inspection Doesn't Scale</h2>
+      <h2>The Problem</h2>
       <p>
         In CNC manufacturing, cutting tools degrade with use. A worn tool produces
         inaccurate cuts, damages workpieces, and can cause downstream equipment failure.
-        The traditional response — scheduled replacements or manual checks — is wasteful
+        The traditional response involves scheduled replacements and manual checks. But this is wasteful
         on both ends: fixed-interval changes discard tools that still have life left,
         while manual inspection introduces human error, fatigue, and labor cost.
       </p>
       <p>
-        The question this project set out to answer was simple: <strong>can the inspection
-        and replacement process be fully automated</strong> using a vision-based detection
-        system feeding directly into a PLC-controlled tool changer?
+        The question this project set out to answer was this: <strong>can the inspection
+        and replacement process be fully automated</strong> using a vision detection
+        system connected to a PLC controlled tool changer?
       </p>
     </div>
 
     <!-- SYSTEM OVERVIEW -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">System Architecture</div>
-      <h2>How the Two Systems Connect</h2>
+      <h2>How the two systems connect</h2>
       <p>
-        The design splits into two distinct components that work in sequence.
+        The design splits into two components that work in sequence.
         The vision system handles detection; the PLC handles the physical response.
-        Neither can operate without the other — the output of the MATLAB script
+        Neither can operate without the other since the output of the MATLAB script
         is the input trigger for the PLC sequence.
       </p>
 
@@ -514,7 +493,7 @@
         <img src="../assets/tool_schematic.png" alt="PLC system schematic showing CNC machine, tool conveyor, palettes and sensors">
         <div class="figure-caption">
           <strong>System Schematic.</strong> The physical layout of the PLC-controlled replacement
-          system — the CNC machine sits at center, flanked by a tool conveyor running between
+          system. The CNC machine sits at center, flanked by a tool conveyor running between
           a used-tool palette on the left and a new-tool palette on the right. A sensor adjacent
           to the machine detects incoming tools and triggers the insertion timer.
         </div>
@@ -523,11 +502,10 @@
 
     <!-- VISION SYSTEM -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Part 1 — Vision Detection</div>
-      <h2>Reading Tool Wear Through Edge Maps</h2>
+      <h2>Reading Tool Wear through Edge Maps</h2>
       <p>
         The MATLAB vision module works by comparing the edge geometry of a tool tip
-        before and after a machining cycle. A Canny edge detection algorithm extracts
+        before and after a machining cycle. An edge detection algorithm extracts
         the tool's boundary as a binary pixel map. As a tool wears, material is lost
         from the cutting edge — this shows up as a measurable reduction in the number
         of detected edge pixels.
@@ -537,7 +515,7 @@
         the tool as worn and outputs a digital signal to the PLC via a Modbus TCP
         connection. Below the threshold, machining continues uninterrupted.
         As physical CNC tools were not available, the system was validated using
-        images of new and worn end mills — a practical workaround that still
+        images of new and worn end mills. These served as a practical workaround that
         demonstrated the core detection logic cleanly.
       </p>
 
@@ -545,9 +523,9 @@
         <!-- Replace src with: ../assets/tool_edgemap.png -->
         <img src="../assets/tool_edgemap.png" alt="Edge map comparison — new tool vs worn tool">
         <div class="figure-caption">
-          <strong>Edge Map Output.</strong> The MATLAB Canny detector applied to a new tool (left)
+          <strong>Edge Map Output.</strong> The MATLAB detector applied to a new tool (left)
           and a worn tool (right). The new tool produces a dense, detailed edge map reflecting
-          intact cutting geometry. The worn tool shows significantly fewer detected edges —
+          intact cutting geometry. The worn tool shows significantly fewer detected edges while
           the material loss at the tip is directly visible as a reduction in pixel density.
           This difference is what triggers the wear signal.
         </div>
@@ -555,7 +533,7 @@
 
       <div class="code-block">
         <div class="code-header">
-          MATLAB <span>Vision Sensor — Full Detection Code</span>
+          MATLAB <span>Vision Sensor Detection Code</span>
         </div>
         <pre><span class="c">% --- 1. Load Images ---</span>
 <span class="v">img_new</span>  = imread(<span class="s">'tool_new.jpg'</span>);
@@ -605,8 +583,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
 
     <!-- PLC SECTION -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Part 2 — PLC Control</div>
-      <h2>Automating the Physical Replacement Sequence</h2>
+      <h2>Automating the Replacement sequence</h2>
       <p>
         Once the vision module outputs a "Tool Worn" signal, the PLC takes over.
         The ladder logic program — written in OpenPLC — coordinates the full
@@ -636,15 +613,13 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
 
     <!-- FINDINGS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Outcomes</div>
-      <h2>What the System Demonstrates</h2>
+      <h2>What the System demonstrates</h2>
       <div class="findings">
         <div class="finding-item">
           <div class="finding-icon">👁️</div>
           <div class="finding-text">
             <h4>Vision-Based Wear Detection</h4>
-            <p>Edge pixel loss proved a reliable proxy for tool wear — the reduction in
-            detected geometry between a new and worn tool is visually and numerically
+            <p>The reduction in detected geometry between a new and worn tool is visually and numerically
             distinct, giving the threshold check a clear signal to act on.</p>
           </div>
         </div>
@@ -653,8 +628,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
           <div class="finding-text">
             <h4>End-to-End System Integration</h4>
             <p>The Modbus TCP link between MATLAB and OpenPLC demonstrates how a
-            software detection layer can directly trigger physical hardware responses —
-            a workflow applicable to real industrial automation environments.</p>
+            software detection layer can directly trigger physical hardware responses.</p>
           </div>
         </div>
         <div class="finding-item">
@@ -663,7 +637,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
             <h4>Labor & Quality Implications</h4>
             <p>Full automation of the inspection and replacement cycle removes the
             need for manual checks, reduces scrap from worn-tool errors, and
-            prevents downstream equipment damage — addressing the core inefficiencies
+            prevents downstream equipment damage, thus addressing the core inefficiencies
             that motivated the project.</p>
           </div>
         </div>
@@ -671,7 +645,7 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
           <div class="finding-icon">🔭</div>
           <div class="finding-text">
             <h4>Future Work</h4>
-            <p>The current system was validated conceptually without physical hardware.
+            <p>The current system was validated conceptually without much physical hardware.
             Next steps would include testing with actual CNC tools, calibrating the
             wear threshold against real machining data, and automating the tool
             palette replenishment cycle.</p>
@@ -686,9 +660,9 @@ subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Wo
       <p>Full report and PLC ladder logic file available below.</p>
       <div class="download-links">
         <!-- Replace # with your actual PDF path or link -->
-        <a href="../assets/tool-wear-report.pdf" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
+        <a href="../assets/tool-wear-report.pdf" class="download-btn primary">📄 &nbsp;View Report (PDF)</a>
         <!-- Replace # with your PLC file path or link -->
-        <a href="../assets/tool-wear-plc.pdf" class="download-btn secondary">⚙️ &nbsp;Download PLC Logic (PDF)</a>
+        <a href="../assets/tool-wear-plc.pdf" class="download-btn secondary">⚙️ &nbsp;View PLC Logic (PDF)</a>
       </div>
     </div>
 
