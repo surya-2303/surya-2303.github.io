@@ -490,22 +490,7 @@
 fprintf(<span class="c">'Fuel saved per lap: %.3f L\n'</span>, <span class="v">Fuel_savings_per_lap</span>);
 fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class="v">Total_fuel_savings</span>);</pre>
       </div>
-        <pre><span class="c">% Acceleration functions for each mode</span>
-<span class="v">a_stock</span> = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
-<span class="v">a_act</span>   = @(v) ((<span class="v">Fxr</span>+<span class="v">Fxf</span>)-(<span class="v">fr</span>*<span class="v">m</span>*<span class="v">g</span>)-(0.5*<span class="v">rho</span>*<span class="v">cd_act</span>*<span class="v">A</span>.*v.^2))/<span class="v">m</span>;
-
-<span class="c">% Forward Euler integration over 30 seconds at dt = 0.001s</span>
-<span class="k">for</span> k = 2:<span class="v">N</span>
-    <span class="c">% Stock mode</span>
-    <span class="v">v_stock</span>(k) = <span class="v">v_stock</span>(k-1) + <span class="v">a_stock</span>(<span class="v">v_stock</span>(k-1)) * <span class="v">dt</span>;
-    <span class="v">x_stock</span>(k) = <span class="v">x_stock</span>(k-1) + <span class="v">v_stock</span>(k-1) * <span class="v">dt</span>;
-
-    <span class="c">% Active aero mode</span>
-    <span class="v">v_act</span>(k) = <span class="v">v_act</span>(k-1) + <span class="v">a_act</span>(<span class="v">v_act</span>(k-1)) * <span class="v">dt</span>;
-    <span class="v">x_act</span>(k) = <span class="v">x_act</span>(k-1) + <span class="v">v_act</span>(k-1) * <span class="v">dt</span>;
-<span class="k">end</span></pre>
-      </div>
-    </div>
+       
 
     <!-- RESULTS -->
     <div class="content-section fade-up">
