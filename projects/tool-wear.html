@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tool Wear Detection System | Surya Ramachandran</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f0c;
+      --surface: #101510;
+      --surface2: #172019;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8c97a;
+      --accent2: #5aab6e;
+      --text: #e4ebe5;
+      --muted: #778a7a;
+      --tag-bg: rgba(90,171,110,0.12);
+      --tag-color: #5aab6e;
+      --tag-border: rgba(90,171,110,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(11,15,12,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--accent);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 8rem 0 0;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 80% 40%, rgba(90,171,110,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 40% at 10% 80%, rgba(232,201,122,0.05) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 100%);
+    }
+
+    /* ── HERO SPLIT LAYOUT ── */
+    .hero-split {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+    }
+    .hero-text {
+      padding: 3rem 4rem 4rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent2); }
+    .breadcrumb span { color: var(--border); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-color);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px; padding: 0.25rem 0.65rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .hero-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      line-height: 1.08; letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero-text h1 em { font-style: italic; color: var(--accent2); }
+    .hero-sub {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      font-size: 0.85rem; color: var(--muted);
+    }
+    .hero-meta span strong {
+      color: var(--text); display: block;
+      font-size: 0.75rem; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 0.2rem;
+    }
+
+    /* ── TOOL COMPARISON HERO VISUAL ── */
+    .hero-visual {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border-left: 1px solid var(--border);
+    }
+    .tool-panel {
+      position: relative; overflow: hidden;
+    }
+    .tool-panel img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      filter: brightness(0.85);
+      transition: filter 0.3s;
+    }
+    .tool-panel:hover img { filter: brightness(1); }
+    .tool-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1rem 1.25rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .tool-label.new { color: var(--accent2); }
+    .tool-label.worn { color: #e87a7a; }
+    .tool-divider {
+      position: absolute; top: 0; bottom: 0;
+      left: 50%; width: 1px;
+      background: var(--border); z-index: 2;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 4rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .stat-item {
+      background: var(--surface2);
+      padding: 2rem; text-align: center;
+    }
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem; color: var(--accent);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 5rem 4rem; }
+    .content-section { margin-bottom: 4rem; }
+    .content-section:last-child { margin-bottom: 0; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-eyebrow::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--accent);
+    }
+    .content-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem; margin-bottom: 1.25rem; line-height: 1.2;
+    }
+    .content-section p {
+      color: var(--muted); line-height: 1.85; margin-bottom: 1rem;
+    }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section p strong { color: var(--text); }
+
+    /* ── FIGURE BLOCKS ── */
+    .figure-block {
+      margin: 2.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .figure-block img {
+      width: 100%; display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .figure-caption {
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+    }
+    .figure-caption strong { color: var(--accent); }
+
+    /* ── LIGHT BACKGROUND FIGURE (for white bg diagrams) ── */
+    .figure-block.light-diagram {
+      background: #f5f5f0;
+      border-color: rgba(0,0,0,0.1);
+    }
+    .figure-block.light-diagram img {
+      border-bottom-color: rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      background: #f5f5f0;
+    }
+    .figure-block.light-diagram .figure-caption {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SYSTEM FLOW ── */
+    .system-flow {
+      display: flex; align-items: center;
+      gap: 0; margin: 2rem 0;
+      overflow-x: auto; padding-bottom: 0.5rem;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      min-width: 130px; flex-shrink: 0;
+    }
+    .flow-step .step-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .flow-step .step-label {
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--text); line-height: 1.3;
+    }
+    .flow-step .step-sub {
+      font-size: 0.72rem; color: var(--muted);
+      margin-top: 0.2rem; line-height: 1.3;
+    }
+    .flow-arrow {
+      color: var(--accent); font-size: 1.2rem;
+      padding: 0 0.5rem; flex-shrink: 0;
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden; margin: 2rem 0;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .code-header span { color: var(--accent2); }
+    .code-block pre {
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem; line-height: 1.7;
+      color: #c8d8c8;
+      max-height: 500px; overflow-y: auto;
+    }
+    .c { color: var(--muted); }
+    .k { color: var(--accent); }
+    .v { color: var(--accent2); }
+    .s { color: #c8a96e; }
+
+    /* ── FINDINGS ── */
+    .findings { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .finding-item {
+      display: flex; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .finding-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .finding-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text); }
+    .finding-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+    /* ── DOWNLOADS ── */
+    .downloads {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem; margin-top: 3rem;
+    }
+    .downloads h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.4rem;
+    }
+    .downloads p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .download-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1.5rem; border-radius: 7px;
+      font-size: 0.88rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .download-btn.primary { background: var(--accent); color: #0b0f0c; }
+    .download-btn.primary:hover { background: #f0d890; transform: translateY(-1px); }
+    .download-btn.secondary {
+      background: transparent; color: var(--accent2);
+      border: 1px solid var(--tag-border);
+    }
+    .download-btn.secondary:hover { background: var(--tag-bg); transform: translateY(-1px); }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .page-footer a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; transition: color 0.2s;
+    }
+    .page-footer a:hover { color: var(--accent2); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero-split { grid-template-columns: 1fr; }
+      .hero-text { padding: 3rem 1.5rem 2rem; }
+      .hero-visual { min-height: 300px; border-left: none; border-top: 1px solid var(--border); }
+      .stats-row { padding: 2rem 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .content { padding: 3rem 1.5rem; }
+      .page-footer { padding: 1.5rem; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">SR</a>
+    <a href="../index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-split">
+
+      <!-- LEFT: TEXT -->
+      <div class="hero-text">
+        <div class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span>/</span>
+          <a href="../index.html#projects">Projects</a>
+          <span>/</span>
+          Tool Wear Detection
+        </div>
+        <div class="hero-tags">
+          <span class="tag">MATLAB</span>
+          <span class="tag">Computer Vision</span>
+          <span class="tag">PLC</span>
+          <span class="tag">CNC Machining</span>
+          <span class="tag">Team Project</span>
+        </div>
+        <h1>Automated Tool Wear<br><em>Detection & Replacement</em></h1>
+        <p class="hero-sub">
+          A conceptual system integrating computer vision and PLC ladder logic
+          to automatically detect cutting-tool wear and trigger a replacement
+          sequence in CNC machining operations — eliminating the need for
+          manual inspection entirely.
+        </p>
+        <div class="hero-meta">
+          <span><strong>Date</strong>November 2025</span>
+          <span><strong>Course</strong>MAE 564, UB</span>
+          <span><strong>Tools</strong>MATLAB, PLC</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: TOOL COMPARISON -->
+      <div class="hero-visual">
+        <!-- Replace src values with: ../assets/tool_new.jpg and ../assets/tool_worn.jpg -->
+        <div class="tool-panel">
+          <img src="../assets/tool_new.jpg" alt="New cutting tool">
+          <div class="tool-label new">✓ New Tool</div>
+        </div>
+        <div class="tool-divider"></div>
+        <div class="tool-panel">
+          <img src="../assets/tool_worn.jpg" alt="Worn cutting tool">
+          <div class="tool-label worn">⚠ Worn Tool</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row fade-up">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">9</div>
+        <div class="stat-label">PLC rungs controlling<br>the full replacement sequence</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Manual inspection steps<br>required during operation</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">2</div>
+        <div class="stat-label">Integrated systems —<br>computer vision + PLC control</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- PROBLEM -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">The Problem</div>
+      <h2>Why Manual Tool Inspection Doesn't Scale</h2>
+      <p>
+        In CNC manufacturing, cutting tools degrade with use. A worn tool produces
+        inaccurate cuts, damages workpieces, and can cause downstream equipment failure.
+        The traditional response — scheduled replacements or manual checks — is wasteful
+        on both ends: fixed-interval changes discard tools that still have life left,
+        while manual inspection introduces human error, fatigue, and labor cost.
+      </p>
+      <p>
+        The question this project set out to answer was simple: <strong>can the inspection
+        and replacement process be fully automated</strong> using a vision-based detection
+        system feeding directly into a PLC-controlled tool changer?
+      </p>
+    </div>
+
+    <!-- SYSTEM OVERVIEW -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">System Architecture</div>
+      <h2>How the Two Systems Connect</h2>
+      <p>
+        The design splits into two distinct components that work in sequence.
+        The vision system handles detection; the PLC handles the physical response.
+        Neither can operate without the other — the output of the MATLAB script
+        is the input trigger for the PLC sequence.
+      </p>
+
+      <div class="system-flow">
+        <div class="flow-step">
+          <div class="step-icon">📷</div>
+          <div class="step-label">Image Capture</div>
+          <div class="step-sub">Tool tip photographed before & after cycle</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🔍</div>
+          <div class="step-label">Edge Detection</div>
+          <div class="step-sub">Canny algorithm maps tool geometry</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">⚖️</div>
+          <div class="step-label">Wear Threshold</div>
+          <div class="step-sub">Pixel loss compared against 4% threshold</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">📡</div>
+          <div class="step-label">PLC Signal</div>
+          <div class="step-sub">"Tool Worn" bit sent via Modbus</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🔧</div>
+          <div class="step-label">Tool Change</div>
+          <div class="step-sub">Automated replacement sequence executes</div>
+        </div>
+      </div>
+
+      <div class="figure-block light-diagram">
+        <!-- Replace src with: ../assets/tool_schematic.png -->
+        <img src="../assets/tool_schematic.png" alt="PLC system schematic showing CNC machine, tool conveyor, palettes and sensors">
+        <div class="figure-caption">
+          <strong>System Schematic.</strong> The physical layout of the PLC-controlled replacement
+          system — the CNC machine sits at center, flanked by a tool conveyor running between
+          a used-tool palette on the left and a new-tool palette on the right. A sensor adjacent
+          to the machine detects incoming tools and triggers the insertion timer.
+        </div>
+      </div>
+    </div>
+
+    <!-- VISION SYSTEM -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Part 1 — Vision Detection</div>
+      <h2>Reading Tool Wear Through Edge Maps</h2>
+      <p>
+        The MATLAB vision module works by comparing the edge geometry of a tool tip
+        before and after a machining cycle. A Canny edge detection algorithm extracts
+        the tool's boundary as a binary pixel map. As a tool wears, material is lost
+        from the cutting edge — this shows up as a measurable reduction in the number
+        of detected edge pixels.
+      </p>
+      <p>
+        When the pixel loss exceeds a <strong>4% threshold</strong>, the module flags
+        the tool as worn and outputs a digital signal to the PLC via a Modbus TCP
+        connection. Below the threshold, machining continues uninterrupted.
+        As physical CNC tools were not available, the system was validated using
+        images of new and worn end mills — a practical workaround that still
+        demonstrated the core detection logic cleanly.
+      </p>
+
+      <div class="figure-block">
+        <!-- Replace src with: ../assets/tool_edgemap.png -->
+        <img src="../assets/tool_edgemap.png" alt="Edge map comparison — new tool vs worn tool">
+        <div class="figure-caption">
+          <strong>Edge Map Output.</strong> The MATLAB Canny detector applied to a new tool (left)
+          and a worn tool (right). The new tool produces a dense, detailed edge map reflecting
+          intact cutting geometry. The worn tool shows significantly fewer detected edges —
+          the material loss at the tip is directly visible as a reduction in pixel density.
+          This difference is what triggers the wear signal.
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          MATLAB <span>Vision Sensor — Full Detection Code</span>
+        </div>
+        <pre><span class="c">% --- 1. Load Images ---</span>
+<span class="v">img_new</span>  = imread(<span class="s">'tool_new.jpg'</span>);
+<span class="v">img_worn</span> = imread(<span class="s">'tool_worn.jpg'</span>);
+
+<span class="v">g_new</span>  = rgb2gray(<span class="v">img_new</span>);
+<span class="v">g_worn</span> = rgb2gray(<span class="v">img_worn</span>);
+
+<span class="c">% --- 2. Extract Tool Edge ---</span>
+<span class="v">E_new</span>  = edge(<span class="v">g_new</span>,  <span class="s">'canny'</span>, .02, 8);
+<span class="v">E_worn</span> = edge(<span class="v">g_worn</span>, <span class="s">'canny'</span>, .02, 8);
+
+<span class="c">% --- 3. Compute Wear ---</span>
+<span class="v">orig_pixels</span>    = sum(<span class="v">E_new</span>(:));
+<span class="v">current_pixels</span> = sum(<span class="v">E_worn</span>(:));
+<span class="v">missing_pixels</span> = <span class="v">orig_pixels</span> - <span class="v">current_pixels</span>;
+
+<span class="v">wear_pct</span> = <span class="v">missing_pixels</span> / <span class="v">orig_pixels</span>;
+fprintf(<span class="s">'Tool Wear Percentage = %.2f%%\n'</span>, <span class="v">wear_pct</span> * 100);
+
+<span class="c">% --- 4. Threshold Check ---</span>
+<span class="v">TH</span>      = 0.04;   <span class="c">% 4% wear threshold</span>
+<span class="v">PLC_OUT</span> = <span class="v">wear_pct</span> > <span class="v">TH</span>;
+
+<span class="k">if</span> <span class="v">PLC_OUT</span>
+    disp(<span class="s">'TOOL CHANGE REQUIRED'</span>);
+<span class="k">else</span>
+    disp(<span class="s">'Tool OK'</span>);
+<span class="k">end</span>
+
+<span class="c">% --- 5. Send Signal to PLC via Modbus ---</span>
+<span class="k">try</span>
+    <span class="v">plc</span> = modbus(<span class="s">'tcpip'</span>, <span class="s">'127.0.0.1'</span>, 502);
+    write(<span class="v">plc</span>, <span class="s">'holdingregs'</span>, 0, uint16(<span class="v">PLC_OUT</span>));
+    disp(<span class="s">'Signal sent to OpenPLC (MW0).'</span>);
+<span class="k">catch</span> ME
+    disp(<span class="s">'Could not connect to OpenPLC Modbus server.'</span>);
+    disp(ME.message);
+<span class="k">end</span>
+
+<span class="c">% --- 6. Visualization ---</span>
+figure;
+subplot(1,2,1); imshow(<span class="v">E_new</span>);  title(<span class="s">'New Tool Edge Map'</span>);
+subplot(1,2,2); imshow(<span class="v">E_worn</span>); title(<span class="s">'Worn Tool Edge Map'</span>);</pre>
+      </div>
+    </div>
+
+    <!-- PLC SECTION -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Part 2 — PLC Control</div>
+      <h2>Automating the Physical Replacement Sequence</h2>
+      <p>
+        Once the vision module outputs a "Tool Worn" signal, the PLC takes over.
+        The ladder logic program — written in OpenPLC — coordinates the full
+        tool-change sequence across 9 rungs, handling everything from halting
+        the machining cycle to resuming operation with a fresh tool.
+      </p>
+      <p>
+        A sensor adjacent to the CNC machine detects the incoming replacement tool
+        and triggers a timed insertion delay, ensuring the tool reaches its slot
+        rather than stopping short. An alarm light notifies the operator when the
+        new-tool palette runs low — the only human intervention the system requires.
+        This project was completed in collaboration with <strong>Karan Keshav</strong>,
+        with the PLC logic and system integration developed jointly.
+      </p>
+
+      <div class="figure-block light-diagram">
+        <!-- Replace src with: ../assets/tool_ladder.png — use a screenshot of the ladder logic PDF -->
+        <img src="../assets/tool_ladder.png" alt="PLC ladder logic diagram showing the 9-rung tool replacement sequence">
+        <div class="figure-caption">
+          <strong>PLC Ladder Logic (Rungs 1–5).</strong> The first five rungs of the replacement
+          sequence: vision signal halts CNC operation → tool removal triggered → conveyor
+          activated → new tool detected by sensor → insertion timer started. Full ladder
+          logic available in the project PDF.
+        </div>
+      </div>
+    </div>
+
+    <!-- FINDINGS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Outcomes</div>
+      <h2>What the System Demonstrates</h2>
+      <div class="findings">
+        <div class="finding-item">
+          <div class="finding-icon">👁️</div>
+          <div class="finding-text">
+            <h4>Vision-Based Wear Detection</h4>
+            <p>Edge pixel loss proved a reliable proxy for tool wear — the reduction in
+            detected geometry between a new and worn tool is visually and numerically
+            distinct, giving the threshold check a clear signal to act on.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔗</div>
+          <div class="finding-text">
+            <h4>End-to-End System Integration</h4>
+            <p>The Modbus TCP link between MATLAB and OpenPLC demonstrates how a
+            software detection layer can directly trigger physical hardware responses —
+            a workflow applicable to real industrial automation environments.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">💰</div>
+          <div class="finding-text">
+            <h4>Labor & Quality Implications</h4>
+            <p>Full automation of the inspection and replacement cycle removes the
+            need for manual checks, reduces scrap from worn-tool errors, and
+            prevents downstream equipment damage — addressing the core inefficiencies
+            that motivated the project.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔭</div>
+          <div class="finding-text">
+            <h4>Future Work</h4>
+            <p>The current system was validated conceptually without physical hardware.
+            Next steps would include testing with actual CNC tools, calibrating the
+            wear threshold against real machining data, and automating the tool
+            palette replenishment cycle.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="downloads fade-up">
+      <h3>Project Materials</h3>
+      <p>Full report and PLC ladder logic file available below.</p>
+      <div class="download-links">
+        <!-- Replace # with your actual PDF path or link -->
+        <a href="../assets/tool-wear-report.pdf" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
+        <!-- Replace # with your PLC file path or link -->
+        <a href="../assets/tool-wear-plc.pdf" class="download-btn secondary">⚙️ &nbsp;Download PLC Logic (PDF)</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE FOOTER -->
+  <div class="page-footer">
+    <a href="../index.html#projects">← Back to all projects</a>
+    <a href="../index.html#contact">Get in touch →</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
