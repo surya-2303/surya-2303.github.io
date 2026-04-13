@@ -339,9 +339,8 @@
       </p>
       <div class="hero-meta">
         <span><strong>Date</strong>October 2024</span>
-        <span><strong>Course</strong>Road Vehicle Dynamics, UB</span>
         <span><strong>Vehicle</strong>2014 McLaren P1</span>
-        <span><strong>Tools</strong>MATLAB</span>
+        <span><strong>Tools</strong>MATLAB, Vehicle Dynamics, MS Excel</span>
       </div>
     </div>
   </div>
@@ -369,18 +368,15 @@
 
     <!-- OVERVIEW -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Overview</div>
       <h2>What This Project Is About</h2>
       <p>
         Active aerodynamics refers to movable body components that adapt in real time to
-        manipulate airflow around a vehicle — reducing drag on straights, increasing downforce
-        through corners. The 2014 McLaren P1 was chosen as the test vehicle because it was
-        built from the factory with an active rear wing system, providing documented,
-        reliable data to anchor the simulations rather than relying on estimates alone.
+        manipulate airflow around a vehicle. The McLaren P1 is a great sports car with documented runs using active aerodynamics.
+        That, along with my personal fondness for McLaren cars, was a key factor in selecting the car to analyze for this stufy.
       </p>
       <p>
         The goal was to quantify the performance delta between the P1's two aerodynamic
-        states — <strong>stock mode</strong> (passive, higher drag) and <strong>active aero mode</strong>
+        states: <strong>stock mode</strong> (passive, higher drag) and <strong>active aero mode</strong>
         (wing deployed, lower drag coefficient) — across three areas: straight-line
         acceleration, cornering and tire behavior, and fuel consumption.
       </p>
@@ -388,11 +384,10 @@
 
     <!-- METHODOLOGY -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Methodology</div>
       <h2>How the Simulations Were Built</h2>
       <p>
-        All simulations were written from scratch in MATLAB. Vehicle parameters —
-        mass, frontal area, drag coefficients, lift coefficient — were sourced directly
+        All simulations were written from scratch in MATLAB. Vehicle parameters like
+        mass, frontal area, drag coefficients, lift coefficient were sourced directly
         from McLaren's published specifications and automotive catalogues, with clearly
         documented assumptions where real data was unavailable.
       </p>
@@ -494,13 +489,12 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
 
     <!-- RESULTS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Results</div>
       <h2>What the Simulations Showed</h2>
 
       <p>
-        The results were split across three areas. Each told a consistent story:
-        active aero delivers meaningful, quantifiable gains — not just in outright speed,
-        but in how the car manages grip and energy over a full race distance.
+        The results were split across three areas:
+        active aero delivers meaningful, noticable gains in outright speed,
+        and in how the car manages grip and energy over a full race distance.
       </p>
 
       <div class="figure-block">
@@ -508,8 +502,8 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
         <img src="../assets/figure_velocity.png" alt="Velocity vs Time — Stock Mode vs Active Aero Mode">
         <div class="figure-caption">
           <strong>Fig 1 — Velocity vs Time.</strong> Over a 30-second straight-line run from a rolling start,
-          the active aero mode reaches approximately 95 m/s versus 90 m/s in stock mode —
-          a gain of ~18 km/h driven entirely by the reduction in drag coefficient from 0.34 to 0.28.
+          the active aero mode reaches approximately 95 m/s versus 90 m/s in stock mode which amounts to
+          a gain of ~18 km/h. This is owed entirely to the reduction in drag coefficient from 0.34 to 0.28.
         </div>
       </div>
 
@@ -519,7 +513,7 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
           <strong>Fig 2 — Outer Tire Normal Load During Cornering.</strong> The downforce generated
           by the active wing increases the normal load on the outer tires at speed, growing
           the gap between modes as velocity rises. At 70 m/s, the active aero mode produces
-          roughly 10 kN more normal load on the outer tires — translating directly to increased
+          roughly 10 kN more normal load on the outer tires which translates directly to increased
           cornering grip.
         </div>
       </div>
@@ -530,7 +524,7 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
           <strong>Fig 3 — Cumulative Fuel Consumption.</strong> The reduced aerodynamic load means
           the engine expends less energy fighting drag. Over a quarter-mile run the saving is
           small (~5 mL), but extrapolated to a 5 km lap and scaled to 30 laps, active aero
-          saves approximately <strong>1.6 litres</strong> of fuel over a race distance — before
+          saves approximately <strong>1.6 litres</strong> of fuel over a race distance before
           accounting for the compounding effect of carrying less fuel weight.
         </div>
       </div>
@@ -538,8 +532,7 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
 
     <!-- FINDINGS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Key Findings</div>
-      <h2>Conclusions</h2>
+      <h2>Findings and Conclusions</h2>
 
       <div class="findings">
         <div class="finding-item">
@@ -547,7 +540,7 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
           <div class="finding-text">
             <h4>Straight-Line Performance</h4>
             <p>Reducing the drag coefficient from 0.34 to 0.28 resulted in a consistent
-            speed advantage that widened over time — reaching ~18 km/h at the 30-second mark.
+            speed advantage reaching ~18 km/h at the 30-second mark.
             The engine's power budget is freed up as drag decreases, compounding the gain.</p>
           </div>
         </div>
@@ -557,8 +550,8 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
             <h4>Cornering & Tire Grip</h4>
             <p>Active aero generates additional downforce at speed, increasing normal loads on
             both inner and outer tires. Slip angle analysis confirmed that this translates
-            to improved cornering grip — tires in active aero mode maintain higher slip angles
-            at velocity, indicating greater lateral force capacity.</p>
+            to improved cornering grip as tires in active aero mode maintain higher slip angles
+            at velocity.</p>
           </div>
         </div>
         <div class="finding-item">
@@ -577,7 +570,7 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
             <h4>Limitations & Future Work</h4>
             <p>The study relied on publicly available specifications and documented assumptions
             where data was unavailable. Given more resources, CFD simulation and Pacejka
-            Magic Formula tire modeling would produce significantly more detailed results —
+            Magic Formula tire modeling would produce significantly more detailed results,
             particularly for the tire compound analysis section.</p>
           </div>
         </div>
@@ -587,10 +580,10 @@ fprintf(<span class="c">'Fuel saved over 30 laps: %.3f L\n'</span>, <span class=
     <!-- DOWNLOADS -->
     <div class="downloads fade-up">
       <h3>Project Materials</h3>
-      <p>Full report and source code available below. The report is typeset in LaTeX; the code is fully commented MATLAB.</p>
+      <p>Full report available below</p>
       <div class="download-links">
         <!-- Replace # with your actual PDF link when ready -->
-        <a href="https://surya-2303.github.io/assets/active-aero-report.pdf" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
+        <a href="https://surya-2303.github.io/assets/active-aero-report.pdf" class="download-btn primary">📄 &nbsp;View Report (PDF)</a>
         <!-- Replace # with your GitHub repo URL when ready -->
       </div>
     </div>
