@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crew Re-entry Vehicle | Surya Ramachandran</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f0c;
+      --surface: #101510;
+      --surface2: #172019;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8c97a;
+      --accent2: #5aab6e;
+      --text: #e4ebe5;
+      --muted: #778a7a;
+      --tag-bg: rgba(90,171,110,0.12);
+      --tag-color: #5aab6e;
+      --tag-border: rgba(90,171,110,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px; line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(11,15,12,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--accent);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 8rem 0 0;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 75% 40%, rgba(90,171,110,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 40% at 10% 80%, rgba(232,201,122,0.05) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 100%);
+    }
+
+    /* ── HERO SPLIT ── */
+    .hero-split {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: 55vh;
+    }
+    .hero-text {
+      padding: 3rem 4rem 4rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent2); }
+    .breadcrumb span { color: var(--border); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-color);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px; padding: 0.25rem 0.65rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .hero-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.25rem;
+    }
+    .hero-text h1 em { font-style: italic; color: var(--accent2); }
+    .hero-sub {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      font-size: 0.85rem; color: var(--muted);
+    }
+    .hero-meta span strong {
+      color: var(--text); display: block;
+      font-size: 0.75rem; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 0.2rem;
+    }
+
+    /* ── HERO CAD VISUAL ── */
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      background: #f0f0ee;
+      border-left: 1px solid rgba(0,0,0,0.08);
+      padding: 2rem;
+      overflow: hidden;
+    }
+    .hero-visual img {
+      width: 100%; max-width: 420px;
+      object-fit: contain; display: block;
+    }
+    .hero-visual::after {
+      content: 'L-73 Aluminum · Ariane 6 CRV';
+      position: absolute; bottom: 0.75rem; right: 1rem;
+      font-size: 0.7rem; color: #999; font-style: italic;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 4rem;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .stat-item {
+      background: var(--surface2);
+      padding: 1.75rem; text-align: center;
+    }
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: var(--accent);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 5rem 4rem; }
+    .content-section { margin-bottom: 4rem; }
+    .content-section:last-child { margin-bottom: 0; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-eyebrow::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--accent);
+    }
+    .content-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem; margin-bottom: 1.25rem; line-height: 1.2;
+    }
+    .content-section p {
+      color: var(--muted); line-height: 1.85; margin-bottom: 1rem;
+    }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section p strong { color: var(--text); }
+
+    /* ── ANALYSIS MODULES ── */
+    .analysis-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin: 1.5rem 0;
+    }
+    .analysis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+    }
+    .analysis-card h4 {
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--accent2); margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .analysis-card p {
+      font-size: 0.82rem; color: var(--muted);
+      line-height: 1.6; margin: 0;
+    }
+
+    /* ── RESULT CALLOUT ── */
+    .result-callout {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .result-callout .result-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .result-callout h4 {
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--accent); margin-bottom: 0.3rem;
+    }
+    .result-callout p {
+      font-size: 0.84rem; color: var(--muted);
+      line-height: 1.6; margin: 0;
+    }
+    .result-callout p strong { color: var(--text); }
+
+    /* ── FIGURE BLOCKS ── */
+    .figure-block {
+      margin: 2.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .figure-block img {
+      width: 100%; display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .figure-caption {
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+    }
+    .figure-caption strong { color: var(--accent); }
+    .figure-block.light-diagram { background: #f5f5f0; border-color: rgba(0,0,0,0.1); }
+    .figure-block.light-diagram img { border-bottom-color: rgba(0,0,0,0.08); padding: 1.5rem; background: #f5f5f0; }
+    .figure-block.light-diagram .figure-caption { background: var(--surface2); border-top: 1px solid var(--border); }
+
+    .figures-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; margin: 2.5rem 0;
+    }
+    .figures-grid .figure-block { margin: 0; }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin: 2rem 0;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .code-header span { color: var(--accent2); }
+    .code-block pre {
+      padding: 1.5rem; overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem; line-height: 1.7;
+      color: #c8d8c8;
+      max-height: 420px; overflow-y: auto;
+    }
+    .c { color: var(--muted); }
+    .k { color: var(--accent); }
+    .v { color: var(--accent2); }
+
+    /* ── FINDINGS ── */
+    .findings { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .finding-item {
+      display: flex; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+    }
+    .finding-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .finding-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text); }
+    .finding-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+    /* ── DOWNLOADS ── */
+    .downloads {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 2rem; margin-top: 3rem;
+    }
+    .downloads h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.4rem;
+    }
+    .downloads p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .download-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1.5rem; border-radius: 7px;
+      font-size: 0.88rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .download-btn.primary { background: var(--accent); color: #0b0f0c; }
+    .download-btn.primary:hover { background: #f0d890; transform: translateY(-1px); }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .page-footer a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; transition: color 0.2s;
+    }
+    .page-footer a:hover { color: var(--accent2); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero-split { grid-template-columns: 1fr; }
+      .hero-text { padding: 3rem 1.5rem 2rem; }
+      .hero-visual { min-height: 280px; border-left: none; border-top: 1px solid rgba(0,0,0,0.08); }
+      .stats-row { padding: 2rem 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 3rem 1.5rem; }
+      .analysis-grid { grid-template-columns: 1fr; }
+      .figures-grid { grid-template-columns: 1fr; }
+      .page-footer { padding: 1.5rem; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">SR</a>
+    <a href="../index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-split">
+
+      <div class="hero-text">
+        <div class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span>/</span>
+          <a href="../index.html#projects">Projects</a>
+          <span>/</span>
+          Crew Re-entry Vehicle
+        </div>
+        <div class="hero-tags">
+          <span class="tag">MATLAB</span>
+          <span class="tag">Structural Analysis</span>
+          <span class="tag">AutoCAD</span>
+          <span class="tag">Space Structures</span>
+          <span class="tag">Team Project</span>
+        </div>
+        <h1>Structural Design &<br><em>Analysis of a Crew</em><br>Re-entry Vehicle</h1>
+        <p class="hero-sub">
+          A ground-up structural design of a crewed spacecraft return module
+          for the Ariane 6 launch vehicle — covering five structural analyses
+          from wind shear displacement through torsional warping, validated
+          against proof stress requirements throughout.
+        </p>
+        <div class="hero-meta">
+          <span><strong>Date</strong>March – May 2025</span>
+          <span><strong>Course</strong>MAE 527, UB</span>
+          <span><strong>Team</strong>4 Members</span>
+          <span><strong>Material</strong>L-73 Aluminum</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Replace src with: ../assets/crv_cad.jpeg -->
+        <img src="../assets/crv_cad.jpeg" alt="Isometric CAD view of the tapered hexagonal CRV module">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row fade-up">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">0.19</div>
+        <div class="stat-label">Compression check result<br>(pass threshold: &lt; 1.0)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0.20</div>
+        <div class="stat-label">Shear check result<br>(pass threshold: &lt; 1.0)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">1.3mm</div>
+        <div class="stat-label">Max lateral displacement<br>under 18.75 kN wind shear</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Structural analyses<br>completed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Overview</div>
+      <h2>Designing From Nothing</h2>
+      <p>
+        This project began with a blank page. Given only a launch vehicle — the
+        Ariane 6 — and a mission objective — crewed return from Low Earth Orbit
+        — a four-person team designed a re-entry module from first principles.
+        Every geometric parameter, material selection, wall thickness, and
+        structural configuration was determined through analysis rather than
+        given as a starting point.
+      </p>
+      <p>
+        The module takes the form of a <strong>tapered hexagonal box</strong>
+        in L-73 aluminum, sized to fit within the Ariane 6 fairing at a maximum
+        radius of 2.7m. It carries two windows and an access hatch — an unusual
+        radially symmetric arrangement not typical of existing CRVs. The
+        structural design was validated across five independent analyses,
+        each addressing a different loading condition the module would face
+        during launch and re-entry.
+      </p>
+      <p>
+        This was a collaborative effort across all four team members. Primary
+        responsibility for the <strong>shear flow analysis</strong> lay with
+        this author, with contributions spanning the tapered section stress
+        analysis, warping calculations, and CAD modeling throughout the project.
+      </p>
+    </div>
+
+    <!-- ANALYSES -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Scope</div>
+      <h2>Five Structural Analyses</h2>
+      <p>
+        The project was organized around five distinct structural problems,
+        each requiring its own methodology and set of assumptions derived
+        from the module's geometry and loading environment.
+      </p>
+
+      <div class="analysis-grid">
+        <div class="analysis-card">
+          <h4>🌬️ Wind Shear Displacement</h4>
+          <p>Modeled lateral displacement and angular rotation of the module
+          under 18.75 kN wind shear at the Ariane 6 launch site in French Guiana,
+          using a coupled stiffness matrix formulation.</p>
+        </div>
+        <div class="analysis-card">
+          <h4>🔩 Pressure Vessel Compliance</h4>
+          <p>Analyzed skin and stringer stresses under ambient pressure loading,
+          computing hoop stress, longitudinal stress, and shear load at stringer
+          locations — verified against proof stress limits.</p>
+        </div>
+        <div class="analysis-card">
+          <h4>📐 Tapered Box Stress & Shear Flow</h4>
+          <p>Computed axial boom stresses and panel shear flows along the tapered
+          hexagonal body under combined shear force and bending moment from
+          launch loading. The shear flow was solved as an open section first,
+          then closed using moment equilibrium.</p>
+        </div>
+        <div class="analysis-card">
+          <h4>🪟 Cutout Reinforcement</h4>
+          <p>Determined required reinforcement geometry around the hatch and window
+          cutouts using stringer load redistribution and pressure vessel frame
+          analysis — establishing the minimum flange thickness of 25mm.</p>
+        </div>
+        <div class="analysis-card">
+          <h4>🔄 Torsional Warping</h4>
+          <p>Applied Saint-Venant warping theory to the thin-walled hexagonal
+          closed section under applied torque, computing the warping displacement
+          at each corner node and verifying closure conditions.</p>
+        </div>
+        <div class="analysis-card">
+          <h4>📦 CAD Model</h4>
+          <p>Full 3D model of the tapered hexagonal module built in AutoCAD,
+          including panel gridding, window and hatch cutouts, and the tapered
+          frustum geometry from 2.7m base to 0.65m top radius.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEY RESULTS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Results</div>
+      <h2>Structural Verification</h2>
+      <p>
+        The core question for each analysis was the same: does the design meet
+        proof stress requirements under the given loading? Across the two primary
+        compliance checks — compression and shear — the results came in well
+        within acceptable limits.
+      </p>
+
+      <div class="result-callout">
+        <div class="result-icon">✅</div>
+        <div>
+          <h4>Design Review — Both Checks Pass</h4>
+          <p>
+            <strong>Compression check: 0.1855</strong> — must be less than 1.0. Pass.<br>
+            <strong>Shear check: 0.1978</strong> — must be less than 1.0. Pass.<br>
+            Both results indicate significant margin against buckling failure under
+            the combined pressure, compression, and shear loading conditions.
+          </p>
+        </div>
+      </div>
+
+      <div class="result-callout">
+        <div class="result-icon">📏</div>
+        <div>
+          <h4>Wind Shear Response</h4>
+          <p>
+            Under 18.75 kN lateral wind shear at launch,
+            the module displaces <strong>δ = 1.3 mm</strong> laterally
+            and rotates <strong>θ = −2.6 mrad</strong> — both within
+            acceptable bounds for the launch configuration.
+          </p>
+        </div>
+      </div>
+
+      <div class="result-callout">
+        <div class="result-icon">🪟</div>
+        <div>
+          <h4>Cutout Frame Sizing</h4>
+          <p>
+            Stress analysis at the hatch cutout confirmed that a
+            <strong>25mm square frame thickness</strong> in L-73 aluminum
+            is sufficient to carry the redistributed loads — with a
+            calculated stress of 64.7 MPa against a proof stress of 276 MPa.
+          </p>
+        </div>
+      </div>
+
+      <div class="figures-grid">
+        <div class="figure-block light-diagram">
+          <!-- Replace src with: ../assets/crv_stress.jpeg -->
+          <img src="../assets/crv_stress.jpeg" alt="Axial stress magnitude along CRV length">
+          <div class="figure-caption">
+            <strong>Fig 1 — Axial Stress Along CRV Length.</strong> Boom stresses
+            increase nonlinearly toward the top of the module due to the taper —
+            the reducing cross-section concentrates bending stress as z increases.
+            Booms 3 and 6 (corner positions) carry approximately double the stress
+            of the remaining booms at any given height.
+          </div>
+        </div>
+        <div class="figure-block light-diagram">
+          <!-- Replace src with: ../assets/crv_shearflow.jpeg -->
+          <img src="../assets/crv_shearflow.jpeg" alt="Shear flow distribution along CRV panels">
+          <div class="figure-caption">
+            <strong>Fig 2 — Shear Flow Along Panels.</strong> The three shear flow
+            distributions — q₁ (bottom edge), q̄ (mid-panel), and q₂ (top edge)
+            — show the highest flows at panels 1 and 6, symmetric about panel 4.
+            The minimum at panel 4 reflects the load path through the hexagonal
+            cross-section under unidirectional shear.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Implementation</div>
+      <h2>Selected Code Excerpts</h2>
+      <p>
+        All analyses were implemented in MATLAB. The warping and shear flow
+        scripts below represent the two sections most central to this author's
+        contributions.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          MATLAB <span>Torsional Warping — Tapered Section</span>
+        </div>
+        <pre><span class="c">% Warping Displacement in a Tapered Hexagonal Box</span>
+<span class="c">% Saint-Venant warping assumptions</span>
+
+<span class="v">s</span>  = 2.19;   <span class="c">% side length [m]</span>
+<span class="v">t</span>  = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]; <span class="c">% wall thickness [m]</span>
+<span class="v">A_E</span> = (3*sqrt(3)/2)*<span class="v">s</span>^2;  <span class="c">% enclosed hexagon area [m²]</span>
+<span class="v">rt</span>  = 3.6/2;               <span class="c">% radial distance to wall midpoint [m]</span>
+<span class="v">rvec</span> = <span class="v">rt</span>*ones(1,6);
+
+<span class="v">G</span> = 2.29e10;  <span class="v">T</span> = 1500;    <span class="c">% shear modulus [Pa], torque [Nm]</span>
+
+<span class="v">J</span>         = (4*<span class="v">A_E</span>^2) / sum(<span class="v">s</span>./<span class="v">t</span>);  <span class="c">% torsional constant</span>
+<span class="v">theta_dot</span> = <span class="v">T</span> / (<span class="v">G</span>*<span class="v">J</span>);              <span class="c">% twist per unit length [rad/m]</span>
+<span class="v">K</span>         = sum(1./<span class="v">t</span>) / sum(<span class="v">rvec</span>);   <span class="c">% warping constant</span>
+
+<span class="v">phi</span> = zeros(1,6);
+<span class="k">for</span> i = 1:5
+    <span class="v">dphi</span>    = <span class="v">s</span>*(1/<span class="v">t</span>(i) - <span class="v">K</span>*<span class="v">rvec</span>(i));
+    <span class="v">phi</span>(i+1) = <span class="v">phi</span>(i) + <span class="v">dphi</span>;
+<span class="k">end</span>
+
+<span class="v">w_physical</span> = <span class="v">phi</span> * <span class="v">theta_dot</span>;  <span class="c">% physical warping displacements [m]</span>
+
+<span class="c">% Closure check — phi_A should return to 0</span>
+<span class="v">phi_A_check</span> = <span class="v">phi</span>(6) + <span class="v">s</span>*(1/<span class="v">t</span>(6) - <span class="v">K</span>*<span class="v">rvec</span>(6));</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          MATLAB <span>Shear Flow — Tapered Hexagonal Section</span>
+        </div>
+        <pre><span class="c">% External forces and geometry</span>
+<span class="v">D</span>     = 18750;    <span class="c">% shear force [N]</span>
+<span class="v">M</span>     = 4210875;  <span class="c">% moment [Nm]</span>
+<span class="v">d</span>     = 3.7;      <span class="c">% base diameter [m]</span>
+<span class="v">alpha</span> = 25.37;    <span class="c">% taper angle [deg]</span>
+<span class="v">A_B</span>   = 0.01;     <span class="c">% boom cross-sectional area [m²]</span>
+<span class="v">H</span>     = 3;        <span class="c">% module height [m]</span>
+
+<span class="v">dz</span> = 0.1; <span class="v">z</span> = 0:<span class="v">dz</span>:<span class="v">H</span>;
+
+<span class="c">% Boom stress along module length (z-direction)</span>
+<span class="k">for</span> i = 1:length(<span class="v">z</span>)
+    <span class="v">M_y</span>  = <span class="v">M</span> + <span class="v">D</span>*(<span class="v">H</span>-<span class="v">z</span>(i));
+    <span class="v">s_z</span>  = (<span class="v">d</span>-2*<span class="v">z</span>(i)*tand(<span class="v">alpha</span>))/tand(60);  <span class="c">% side length at height z</span>
+    <span class="v">sigma_Z3</span>(i) = -<span class="v">M_y</span>/(3*<span class="v">A_B</span>*<span class="v">s_z</span>);           <span class="c">% booms 3 and 6</span>
+    <span class="v">sigma_Z1</span>(i) =  <span class="v">M_y</span>/(6*<span class="v">A_B</span>*<span class="v">s_z</span>);           <span class="c">% booms 1,2,4,5</span>
+<span class="k">end</span>
+
+<span class="c">% Shear flow — open section then closed via moment equilibrium</span>
+<span class="v">q</span> = zeros(6,3); <span class="v">q0</span> = zeros(6,3);
+<span class="k">for</span> i = 1:3
+    <span class="v">Dx_w</span> = -1.0751*10^6;
+    <span class="v">s_zz</span> = (<span class="v">d</span>-2*<span class="v">z</span>(i)*tand(<span class="v">alpha</span>))/tand(60);
+    <span class="v">Iyy</span>  = 3*<span class="v">A_B</span>*<span class="v">s_zz</span>^2;
+    <span class="v">q0</span>(2,i) = <span class="v">q0</span>(1,i) - (<span class="v">Dx_w</span>/<span class="v">Iyy</span>)*<span class="v">A_B</span>*0.5*<span class="v">s_zz</span>;
+    <span class="v">q0</span>(3,i) = <span class="v">q0</span>(2,i) - (<span class="v">Dx_w</span>/<span class="v">Iyy</span>)*<span class="v">A_B</span>*<span class="v">s_zz</span>;
+    <span class="v">q0_real</span> = -<span class="v">q0</span>(2,i) - <span class="v">q0</span>(3,i) - 0.5*<span class="v">q0</span>(4,i);  <span class="c">% closure condition</span>
+    <span class="v">q</span>(:,i)  = <span class="v">q0</span>(:,i) + <span class="v">q0_real</span>;
+<span class="k">end</span></pre>
+      </div>
+    </div>
+
+    <!-- FINDINGS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Conclusions</div>
+      <h2>What the Analysis Shows</h2>
+      <div class="findings">
+        <div class="finding-item">
+          <div class="finding-icon">🚀</div>
+          <div class="finding-text">
+            <h4>The Design Meets Proof Stress Requirements</h4>
+            <p>Both the compression and shear interaction checks came in under 0.20 —
+            well within the required limit of 1.0. The design carries significant
+            structural margin under the simulated launch loading conditions.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">📈</div>
+          <div class="finding-text">
+            <h4>Taper Concentrates Stress at the Top</h4>
+            <p>The reducing cross-section causes boom stresses to increase
+            nonlinearly toward the top of the module — reaching ~325 MPa at the
+            apex for the most loaded booms. This has direct implications for
+            wall thickness selection and reinforcement at the upper rim.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔁</div>
+          <div class="finding-text">
+            <h4>Shear Flow Symmetry Confirms Load Path</h4>
+            <p>The shear flow distribution across the six panels is symmetric about
+            panel 4, as expected for a hexagonal section under unidirectional shear.
+            Panel 1 carries the highest shear flow — a result that would inform
+            skin thickness selection in a more detailed design iteration.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔭</div>
+          <div class="finding-text">
+            <h4>Scope for Further Development</h4>
+            <p>The current analysis uses simplified boom-panel idealization and
+            assumes uniform wall thickness. A more refined design would incorporate
+            variable thickness panels, detailed thermal loading from re-entry, and
+            a full dynamic analysis of the separation and descent phases.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="downloads fade-up">
+      <h3>Project Materials</h3>
+      <p>Full project report available below, including all five analyses, derivations, and appendix code.</p>
+      <div class="download-links">
+        <!-- Replace with actual PDF path -->
+        <a href="../assets/crv-report.pdf" class="download-btn primary">📄 &nbsp;Download Report (PDF)</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE FOOTER -->
+  <div class="page-footer">
+    <a href="../index.html#projects">← Back to all projects</a>
+    <a href="../index.html#contact">Get in touch →</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
