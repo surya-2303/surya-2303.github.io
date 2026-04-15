@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoreXY 3D Printer Build | Surya Ramachandran</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f0c;
+      --surface: #101510;
+      --surface2: #172019;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8c97a;
+      --accent2: #5aab6e;
+      --text: #e4ebe5;
+      --muted: #778a7a;
+      --tag-bg: rgba(90,171,110,0.12);
+      --tag-color: #5aab6e;
+      --tag-border: rgba(90,171,110,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px; line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(11,15,12,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--accent);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 75vh;
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .hero-image {
+      position: absolute; inset: 0;
+      background-image: url('../assets/printer_hero.jpeg');
+      background-size: cover;
+      background-position: center 30%;
+      filter: brightness(0.45);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(11,15,12,1) 0%,
+        rgba(11,15,12,0.6) 40%,
+        transparent 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      padding: 0 4rem 4rem;
+      max-width: 760px;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: rgba(255,255,255,0.5);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent2); }
+    .breadcrumb span { color: rgba(255,255,255,0.2); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-color);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px; padding: 0.25rem 0.65rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent2); }
+    .hero-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,0.65);
+      line-height: 1.8; max-width: 600px; margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
+    }
+    .hero-meta span strong {
+      color: rgba(255,255,255,0.9); display: block;
+      font-size: 0.75rem; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 0.2rem;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 4rem;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .stat-item {
+      background: var(--surface2);
+      padding: 1.75rem; text-align: center;
+    }
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: var(--accent);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 5rem 4rem; }
+    .content-section { margin-bottom: 4rem; }
+    .content-section:last-child { margin-bottom: 0; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-eyebrow::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--accent);
+    }
+    .content-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem; margin-bottom: 1.25rem; line-height: 1.2;
+    }
+    .content-section p {
+      color: var(--muted); line-height: 1.85; margin-bottom: 1rem;
+    }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section p strong { color: var(--text); }
+
+    /* ── PHOTO GRID ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 0.75rem;
+      margin: 2.5rem 0;
+    }
+    .photo-item {
+      border-radius: 10px; overflow: hidden;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .photo-item.large {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    .photo-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.3s;
+    }
+    .photo-item:hover img { transform: scale(1.02); }
+    .photo-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 0.6rem 0.9rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── PHASE TIMELINE ── */
+    .phases { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+    .phase-item {
+      display: grid;
+      grid-template-columns: 48px 1px 1fr;
+      gap: 0 1.5rem;
+      padding-bottom: 2.5rem;
+    }
+    .phase-item:last-child { padding-bottom: 0; }
+    .phase-number {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .phase-line { position: relative; background: var(--border); }
+    .phase-line::after {
+      content: ''; position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 1px; height: 100%;
+      background: var(--border);
+    }
+    .phase-item:last-child .phase-line::after { display: none; }
+    .phase-content { padding-top: 0.6rem; }
+    .phase-content h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem; margin-bottom: 0.5rem;
+    }
+    .phase-content p {
+      font-size: 0.88rem; color: var(--muted);
+      line-height: 1.75; margin-bottom: 0;
+    }
+    .phase-content p strong { color: var(--text); }
+
+    /* ── CHALLENGE CARDS ── */
+    .challenges { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .challenge-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 1rem;
+    }
+    .challenge-badge {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.3rem;
+      flex-shrink: 0;
+    }
+    .badge-problem {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #e87a7a; background: rgba(232,122,122,0.1);
+      border: 1px solid rgba(232,122,122,0.2);
+      border-radius: 4px; padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+    }
+    .badge-fix {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent2); background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px; padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+    }
+    .challenge-text h4 {
+      font-size: 0.95rem; font-weight: 600;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .challenge-text p {
+      font-size: 0.85rem; color: var(--muted);
+      line-height: 1.65; margin: 0;
+    }
+    .challenge-text p strong { color: var(--text); }
+
+    /* ── SPEC TABLE ── */
+    .spec-table {
+      width: 100%; border-collapse: collapse;
+      margin: 1.5rem 0; font-size: 0.88rem;
+    }
+    .spec-table tr { border-bottom: 1px solid var(--border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td {
+      padding: 0.75rem 1rem; color: var(--muted); line-height: 1.5;
+    }
+    .spec-table td:first-child {
+      color: var(--text); font-weight: 600;
+      width: 40%; padding-left: 0;
+    }
+    .spec-table td:last-child { padding-right: 0; }
+
+    /* ── FINDINGS ── */
+    .findings { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .finding-item {
+      display: flex; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+    }
+    .finding-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .finding-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text); }
+    .finding-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .page-footer a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; transition: color 0.2s;
+    }
+    .page-footer a:hover { color: var(--accent2); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 3rem; }
+      .stats-row { padding: 2rem 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 3rem 1.5rem; }
+      .photo-grid { grid-template-columns: 1fr 1fr; }
+      .photo-item.large { grid-column: span 2; }
+      .phase-item { grid-template-columns: 40px 1px 1fr; gap: 0 1rem; }
+      .page-footer { padding: 1.5rem; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">SR</a>
+    <a href="../index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <!-- Replace with whichever photo looks best full-bleed — printer_2.jpeg recommended -->
+    <div class="hero-image" style="background-image: url('../assets/printer_2.jpeg')"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#projects">Projects</a>
+        <span>/</span>
+        CoreXY 3D Printer
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Hardware Build</span>
+        <span class="tag">Arduino</span>
+        <span class="tag">Marlin Firmware</span>
+        <span class="tag">CoreXY</span>
+        <span class="tag">Team Project</span>
+      </div>
+      <h1>Building a <em>CoreXY</em><br>3D Printer From Scratch</h1>
+      <p class="hero-sub">
+        A fully functional CoreXY 3D printer built from raw aluminum extrusions —
+        designed, assembled, wired, and calibrated by a four-person team with
+        a deliberate focus on open-source software and keeping costs as low
+        as possible without compromising print quality.
+      </p>
+      <div class="hero-meta">
+        <span><strong>Date</strong>Aug – Nov 2022</span>
+        <span><strong>Location</strong>Bangalore, India</span>
+        <span><strong>Team</strong>4 Members</span>
+        <span><strong>Firmware</strong>Marlin / Arduino</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row fade-up">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Pre-built components —<br>frame cut from raw extrusions</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Open-source software stack —<br>Marlin, Cura, OctoPrint</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">2</div>
+        <div class="stat-label">Hardware issues diagnosed<br>and resolved during build</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">🖨️</div>
+        <div class="stat-label">Fully functional printer<br>producing consistent prints</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Overview</div>
+      <h2>Why Build One When You Can Buy One?</h2>
+      <p>
+        The goal wasn't just to have a 3D printer. It was to understand every
+        layer of how one works — mechanical, electrical, and software — by building
+        it from the ground up. The secondary constraint was cost: every component
+        decision had to be justifiable on a tight budget, which meant sourcing
+        locally, choosing open-source firmware over proprietary systems, and
+        solving problems with ingenuity rather than money.
+      </p>
+      <p>
+        The result is a <strong>CoreXY motion system</strong> — an architecture
+        where both stepper motors are fixed to the frame and drive the print head
+        in X and Y simultaneously through a crossed belt arrangement. The bed
+        moves only in Z. This gives faster, more accurate head movement than
+        the more common Cartesian bed-slinger design, at the cost of more complex
+        belt routing and calibration.
+      </p>
+      <p>
+        This was a team effort across four people, with responsibilities distributed
+        across mechanical assembly, electronics integration, firmware configuration,
+        and testing — though in practice every problem pulled everyone in.
+      </p>
+    </div>
+
+    <!-- PHOTO GALLERY -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Build Gallery</div>
+      <h2>The Machine at Various Stages</h2>
+
+      <div class="photo-grid">
+        <div class="photo-item large" style="height: 320px;">
+          <!-- printer_2.jpeg — wide context shot showing full scale -->
+          <img src="../assets/printer_2.jpeg" alt="Full printer in lab context">
+          <div class="photo-label">Full build — lab context</div>
+        </div>
+        <div class="photo-item" style="height: 320px;">
+          <!-- printer_5.jpeg — electronics rear panel -->
+          <img src="../assets/printer_5.jpeg" alt="Electronics and wiring panel">
+          <div class="photo-label">Electronics panel</div>
+        </div>
+        <div class="photo-item" style="height: 280px;">
+          <!-- printer_1.jpeg — front view frame -->
+          <img src="../assets/printer_1.jpeg" alt="Front view of frame and motion system">
+          <div class="photo-label">Frame & motion system</div>
+        </div>
+        <div class="photo-item" style="height: 280px;">
+          <!-- printer_4.jpeg — extruder and hotend side view -->
+          <img src="../assets/printer_4.jpeg" alt="Extruder and hotend assembly">
+          <div class="photo-label">Extruder & hotend</div>
+        </div>
+        <div class="photo-item" style="height: 280px;">
+          <!-- printer_6.jpeg — top down bed and rails -->
+          <img src="../assets/printer_6.jpeg" alt="Top-down view of heated bed and motion rails">
+          <div class="photo-label">Heated bed & rails</div>
+        </div>
+        <div class="photo-item" style="height: 280px;">
+          <!-- printer_3.jpeg — angled gantry view -->
+          <img src="../assets/printer_3.jpeg" alt="Angled view showing gantry and belt routing">
+          <div class="photo-label">Gantry & belt routing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILD PHASES -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Build Process</div>
+      <h2>From Extrusions to First Print</h2>
+
+      <div class="phases">
+        <div class="phase-item">
+          <div class="phase-number">1</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Frame Construction</h3>
+            <p>
+              Started with raw <strong>V-slot aluminum extrusions</strong> — cut to
+              length and filed at the edges for clean joins. Corner brackets and
+              T-nuts were used to assemble the cubic frame structure. Getting the
+              frame square was the first real challenge: any racking in the frame
+              propagates through every subsequent alignment step.
+            </p>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-number">2</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Motion System Assembly</h3>
+            <p>
+              Smooth steel rods were mounted to carry the X and Y axis carriages.
+              The <strong>CoreXY belt drive</strong> was routed through idler pulleys
+              on opposing corners — a configuration that requires both motors to
+              work in coordinated pairs for every movement. <strong>NEMA 17 stepper
+              motors</strong> were chosen over servos for their simplicity, open-loop
+              reliability, and compatibility with the Marlin firmware ecosystem.
+            </p>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-number">3</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Heated Bed & Z-Axis</h3>
+            <p>
+              The heated bed was mounted on a separate Z-axis carriage driven by a
+              lead screw, keeping it fully independent of the X-Y motion system.
+              The bed uses a <strong>MK2B-style heated PCB</strong> for temperature
+              control — essential for PLA adhesion and preventing warping on
+              first-layer contact.
+            </p>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-number">4</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Electronics Integration</h3>
+            <p>
+              An <strong>Arduino Mega with a RAMPS 1.4 shield</strong> forms the
+              control backbone, with A4988 stepper drivers for each motor axis.
+              A Bluetooth module was integrated for wireless communication, routed
+              through a Raspberry Pi running OctoPrint as the print server —
+              allowing CAD models to be sent directly from a laptop to the printer
+              over the local network without USB tethering.
+            </p>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-number">5</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Firmware & Software Configuration</h3>
+            <p>
+              <strong>Marlin firmware</strong> was flashed onto the Arduino and
+              configured for the specific geometry, motor specifications, and
+              thermistor types of this build. Test G-code files were prepared
+              in <strong>Ultimaker Cura</strong> and sent to the printer. The
+              entire software stack — Marlin, Cura, OctoPrint — is open-source,
+              keeping the build cost down and the system fully modifiable.
+            </p>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-number">6</div>
+          <div class="phase-line"></div>
+          <div class="phase-content">
+            <h3>Testing & Calibration</h3>
+            <p>
+              Test prints exposed two specific problems that required systematic
+              diagnosis and resolution — detailed in the section below. Once resolved,
+              the printer produced consistent, stable prints across multiple test runs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHALLENGES -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Problem Solving</div>
+      <h2>What Went Wrong and How It Got Fixed</h2>
+      <p>
+        Both problems that emerged during testing were diagnosed methodically
+        and resolved — one through firmware, one through a hardware substitution
+        decision. Neither was a design failure; both were calibration and
+        compatibility issues that are entirely normal in a from-scratch build.
+      </p>
+
+      <div class="challenges">
+        <div class="challenge-item">
+          <div class="challenge-badge">
+            <span class="badge-problem">Problem</span>
+            <span class="badge-fix">Fixed</span>
+          </div>
+          <div class="challenge-text">
+            <h4>Z-Axis Layer Height Miscalibration</h4>
+            <p>
+              Early test prints came out visibly warped — layers were spaced too far
+              apart, causing the structure to lean and lose dimensional accuracy.
+              The root cause was incorrect <strong>steps-per-mm configuration</strong>
+              in Marlin for the Z-axis stepper motor: the firmware was advancing the
+              bed by more distance per step than the lead screw geometry required.
+              Recalculating the correct steps-per-mm value from the motor's step
+              angle, microstepping settings, and lead screw pitch, then updating
+              the Marlin configuration, resolved the issue completely.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-item">
+          <div class="challenge-badge">
+            <span class="badge-problem">Problem</span>
+            <span class="badge-fix">Fixed</span>
+          </div>
+          <div class="challenge-text">
+            <h4>Extruder-Filament Temperature Mismatch</h4>
+            <p>
+              The initial extruder was a borrowed unit calibrated for engineering
+              filaments — running at temperatures significantly higher than standard
+              PLA requires. The locally available PLA was over-melting: becoming too
+              fluid to hold shape and slumping onto previous layers before setting.
+              Rather than attempting to work around the temperature mismatch,
+              the decision was made to <strong>source a locally available hotend</strong>
+              rated for the correct PLA temperature range. This was the right
+              engineering call — identifying a specification incompatibility and
+              substituting the correct component rather than forcing a workaround.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPECS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Specifications</div>
+      <h2>Build Summary</h2>
+      <table class="spec-table">
+        <tr><td>Motion Architecture</td><td>CoreXY — fixed motors, moving head, Z-bed</td></tr>
+        <tr><td>Frame</td><td>V-slot aluminum extrusions, cut and assembled from raw stock</td></tr>
+        <tr><td>Motors</td><td>NEMA 17 stepper motors (X, Y, Z, extruder)</td></tr>
+        <tr><td>Control Board</td><td>Arduino Mega + RAMPS 1.4 shield, A4988 stepper drivers</td></tr>
+        <tr><td>Firmware</td><td>Marlin (open-source, custom configured)</td></tr>
+        <tr><td>Slicer</td><td>Ultimaker Cura</td></tr>
+        <tr><td>Print Server</td><td>OctoPrint on Raspberry Pi via Bluetooth</td></tr>
+        <tr><td>Print Material</td><td>PLA (locally sourced)</td></tr>
+        <tr><td>Heated Bed</td><td>MK2B PCB heater for first-layer adhesion</td></tr>
+      </table>
+    </div>
+
+    <!-- TAKEAWAYS -->
+    <div class="content-section fade-up">
+      <div class="section-eyebrow">Takeaways</div>
+      <h2>What This Build Taught</h2>
+      <div class="findings">
+        <div class="finding-item">
+          <div class="finding-icon">🔩</div>
+          <div class="finding-text">
+            <h4>Mechanical Precision Has Downstream Consequences</h4>
+            <p>Frame squareness, belt tension, and rod alignment all compound.
+            A small error at the frame stage shows up as print quality issues
+            at the end — the build process teaches you to work backwards from
+            the output to find the root cause.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">⚙️</div>
+          <div class="finding-text">
+            <h4>Firmware Is the Bridge Between Hardware and Intent</h4>
+            <p>Marlin configuration requires understanding the physical machine
+            at a component level — motor step angles, thermistor tables, PID
+            tuning. Getting the firmware right means understanding what the
+            hardware is actually doing, not just what it should do.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">💡</div>
+          <div class="finding-text">
+            <h4>Constraints Drive Better Decisions</h4>
+            <p>The budget constraint forced deliberate component selection and
+            creative problem-solving at every stage. Open-source tools aren't
+            a compromise — in this context they were the right choice on technical
+            grounds as much as financial ones.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-icon">🔁</div>
+          <div class="finding-text">
+            <h4>Debugging Is an Engineering Skill</h4>
+            <p>Both problems that emerged — the layer height miscalibration and
+            the extruder mismatch — were solved by isolating variables, identifying
+            root causes, and applying the correct fix rather than patching symptoms.
+            That process is transferable to any engineering problem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE FOOTER -->
+  <div class="page-footer">
+    <a href="../index.html#projects">← Back to all projects</a>
+    <a href="../index.html#contact">Get in touch →</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
