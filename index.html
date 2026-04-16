@@ -6,6 +6,17 @@
   <title>Surya Ramachandran | Mechanical Engineer</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
+    .contact-links { display: flex; justify-content: center; gap: 1rem; }
+.contact-icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.contact-icon-btn:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-2px); }
     :root {
       --bg: #0b0f0c;
       --surface: #101510;
@@ -498,8 +509,7 @@
         <div class="timeline-content">
           <div class="timeline-header">
             <img class="timeline-logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/UB_Stacked_Professional.png/320px-UB_Stacked_Professional.png"
-              alt="UB" onerror="this.style.display='none'">
+              src="assets/ub.jpg" onerror="this.style.display='none'">
             <h3>Teaching Assistant</h3>
           </div>
           <div class="timeline-company">University at Buffalo – Road Vehicle Dynamics</div>
@@ -519,8 +529,7 @@ longitudinal/lateral vehicle motion using MATLAB.
         <div class="timeline-content">
           <div class="timeline-header">
             <img class="timeline-logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/ABB_logo.svg/320px-ABB_logo.svg.png"
-              alt="ABB" onerror="this.style.display='none'">
+              src="assets/abb.jpg" onerror="this.style.display='none'">
             <h3>Engineering Intern</h3>
           </div>
           <div class="timeline-company">ABB</div>
@@ -538,8 +547,7 @@ longitudinal/lateral vehicle motion using MATLAB.
         <div class="timeline-content">
           <div class="timeline-header">
             <img class="timeline-logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/MSC_Software_logo.svg/320px-MSC_Software_logo.svg.png"
-              alt="MSC Software" onerror="this.style.display='none'">
+              src="assets/msc.png" onerror="this.style.display='none'">
             <h3>Student Intern</h3>
           </div>
           <div class="timeline-company">MSC Software</div>
@@ -643,8 +651,7 @@ longitudinal/lateral vehicle motion using MATLAB.
       <div class="edu-card">
         <div class="edu-logo-row">
           <img class="edu-logo"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/UB_Stacked_Professional.png/320px-UB_Stacked_Professional.png"
-            alt="UB" onerror="this.style.display='none'">
+            src="ub.jpg" onerror="this.style.display='none'">
           <div>
             <div class="degree">M.S. Mechanical Engineering</div>
             <div class="school">University at Buffalo – SUNY</div>
@@ -656,8 +663,7 @@ longitudinal/lateral vehicle motion using MATLAB.
       <div class="edu-card">
         <div class="edu-logo-row">
           <img class="edu-logo"
-            src="https://upload.wikimedia.org/wikipedia/en/thumb/5/55/CMR_Institute_of_Technology_logo.png/220px-CMR_Institute_of_Technology_logo.png"
-            alt="CMR" onerror="this.style.display='none'">
+            src="cmr.jpeg" onerror="this.style.display='none'">
           <div>
             <div class="degree">B.E. Mechanical Engineering</div>
             <div class="school">CMR Institute of Technology</div>
@@ -677,7 +683,7 @@ longitudinal/lateral vehicle motion using MATLAB.
         <p>Download my resume for a complete overview of my experience, skills, and projects.</p>
       </div>
       <!-- Replace href with your actual resume link, e.g. Google Drive share URL or assets/resume.pdf -->
-      <a href="assets/Surya_Ramachandran_Resume.pdf" target="_blank" class="btn btn-primary" download>
+      <a href="assets/Surya_Ramachandran_Resume.pdf" target="_blank" class="btn btn-primary">
         📄 &nbsp;Download Resume
       </a>
     </div>
@@ -694,11 +700,14 @@ longitudinal/lateral vehicle motion using MATLAB.
         or you can tell me about your favorite looking car! :)
       </p>
       </div>
-      <div class="contact-links">
-        <a href="mailto:suryar1691@gmail.com" class="contact-link">✉️ &nbsp;suryar1691@gmail.com</a>
-        <a href="https://linkedin.com/in/surya-ramachandran23" target="_blank" class="contact-link">💼 &nbsp;linkedin.com/in/surya-ramachandran23</a>
-        <a href="tel:7166120670" class="contact-link">📞 &nbsp;(716) 612-0670</a>
-      </div>
+<div class="contact-links">
+  <a href="mailto:suryar1691@gmail.com" class="contact-icon-btn" title="Send an email">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+  </a>
+  <a href="https://linkedin.com/in/surya-ramachandran23" target="_blank" class="contact-icon-btn" title="LinkedIn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+  </a>
+</div>
     </div>
   </section>
 
