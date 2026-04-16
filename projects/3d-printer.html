@@ -357,12 +357,10 @@
       </div>
       <div class="hero-tags">
         <span class="tag">Hardware Build</span>
-        <span class="tag">Arduino</span>
-        <span class="tag">Marlin Firmware</span>
-        <span class="tag">CoreXY</span>
+        <span class="tag">Additive Manufacturing</span>
         <span class="tag">Team Project</span>
       </div>
-      <h1>Building a <em>CoreXY</em><br>3D Printer From Scratch</h1>
+      <h1>Building a CoreXY<br>3D Printer From Scratch</h1>
       <p class="hero-sub">
         A fully functional CoreXY 3D printer built from raw aluminum extrusions —
         designed, assembled, wired, and calibrated by a four-person team with
@@ -371,31 +369,8 @@
       </p>
       <div class="hero-meta">
         <span><strong>Date</strong>Aug – Nov 2022</span>
-        <span><strong>Location</strong>Bangalore, India</span>
         <span><strong>Team</strong>4 Members</span>
         <span><strong>Firmware</strong>Marlin / Arduino</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- STATS ROW -->
-  <div class="stats-row fade-up">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-value">0</div>
-        <div class="stat-label">Pre-built components —<br>frame cut from raw extrusions</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">100%</div>
-        <div class="stat-label">Open-source software stack —<br>Marlin, Cura, OctoPrint</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">2</div>
-        <div class="stat-label">Hardware issues diagnosed<br>and resolved during build</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">🖨️</div>
-        <div class="stat-label">Fully functional printer<br>producing consistent prints</div>
       </div>
     </div>
   </div>
@@ -405,18 +380,17 @@
 
     <!-- OVERVIEW -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Overview</div>
       <h2>Why Build One When You Can Buy One?</h2>
       <p>
         The goal wasn't just to have a 3D printer. It was to understand every
-        layer of how one works — mechanical, electrical, and software — by building
-        it from the ground up. The secondary constraint was cost: every component
+        layer of how one works (mechanical, electrical, and software) by building
+        it from the ground up. The secondary constraint was cost: every
         decision had to be justifiable on a tight budget, which meant sourcing
         locally, choosing open-source firmware over proprietary systems, and
         solving problems with ingenuity rather than money.
       </p>
       <p>
-        The result is a <strong>CoreXY motion system</strong> — an architecture
+        The result is a <strong>CoreXY motion system</strong>, an architecture
         where both stepper motors are fixed to the frame and drive the print head
         in X and Y simultaneously through a crossed belt arrangement. The bed
         moves only in Z. This gives faster, more accurate head movement than
@@ -426,13 +400,12 @@
       <p>
         This was a team effort across four people, with responsibilities distributed
         across mechanical assembly, electronics integration, firmware configuration,
-        and testing — though in practice every problem pulled everyone in.
+        and testing.
       </p>
     </div>
 
     <!-- PHOTO GALLERY -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Build Gallery</div>
       <h2>The Machine at Various Stages</h2>
 
       <div class="photo-grid">
@@ -471,8 +444,7 @@
 
     <!-- BUILD PHASES -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Build Process</div>
-      <h2>From Extrusions to First Print</h2>
+      <h2>The Build Process</h2>
 
       <div class="phases">
         <div class="phase-item">
@@ -481,7 +453,7 @@
           <div class="phase-content">
             <h3>Frame Construction</h3>
             <p>
-              Started with raw <strong>V-slot aluminum extrusions</strong> — cut to
+              Started with raw V-slot aluminum extrusions cut to
               length and filed at the edges for clean joins. Corner brackets and
               T-nuts were used to assemble the cubic frame structure. Getting the
               frame square was the first real challenge: any racking in the frame
@@ -496,12 +468,12 @@
           <div class="phase-content">
             <h3>Motion System Assembly</h3>
             <p>
-              Smooth steel rods were mounted to carry the X and Y axis carriages.
-              The <strong>CoreXY belt drive</strong> was routed through idler pulleys
-              on opposing corners — a configuration that requires both motors to
-              work in coordinated pairs for every movement. <strong>NEMA 17 stepper
-              motors</strong> were chosen over servos for their simplicity, open-loop
-              reliability, and compatibility with the Marlin firmware ecosystem.
+              Smooth steel rods were mounted for the X and Y axis rails.
+              The CoreXY belt drive was routed through idler pulleys
+              on opposing corners, a configuration that requires both motors to
+              work in coordinated pairs for every movement. NEMA 17 stepper
+              motors were chosen over servos for their simplicity
+              and compatibility with the Marlin firmware ecosystem.
             </p>
           </div>
         </div>
@@ -514,8 +486,8 @@
             <p>
               The heated bed was mounted on a separate Z-axis carriage driven by a
               lead screw, keeping it fully independent of the X-Y motion system.
-              The bed uses a <strong>MK2B-style heated PCB</strong> for temperature
-              control — essential for PLA adhesion and preventing warping on
+              The bed uses a MK2B-style heated PCB for temperature
+              control, essential for PLA adhesion and preventing warping on
               first-layer contact.
             </p>
           </div>
@@ -527,10 +499,10 @@
           <div class="phase-content">
             <h3>Electronics Integration</h3>
             <p>
-              An <strong>Arduino Mega with a RAMPS 1.4 shield</strong> forms the
+              An Arduino Mega with a RAMPS 1.4 shield forms the
               control backbone, with A4988 stepper drivers for each motor axis.
               A Bluetooth module was integrated for wireless communication, routed
-              through a Raspberry Pi running OctoPrint as the print server —
+              through a Raspberry Pi running OctoPrint as the print server,
               allowing CAD models to be sent directly from a laptop to the printer
               over the local network without USB tethering.
             </p>
@@ -543,40 +515,23 @@
           <div class="phase-content">
             <h3>Firmware & Software Configuration</h3>
             <p>
-              <strong>Marlin firmware</strong> was flashed onto the Arduino and
+              Marlin firmware was flashed onto the Arduino and
               configured for the specific geometry, motor specifications, and
               thermistor types of this build. Test G-code files were prepared
-              in <strong>Ultimaker Cura</strong> and sent to the printer. The
-              entire software stack — Marlin, Cura, OctoPrint — is open-source,
+              in Ultimaker Cura and sent to the printer. The
+              entire software stack is open-source,
               keeping the build cost down and the system fully modifiable.
             </p>
           </div>
         </div>
 
-        <div class="phase-item">
-          <div class="phase-number">6</div>
-          <div class="phase-line"></div>
-          <div class="phase-content">
-            <h3>Testing & Calibration</h3>
-            <p>
-              Test prints exposed two specific problems that required systematic
-              diagnosis and resolution — detailed in the section below. Once resolved,
-              the printer produced consistent, stable prints across multiple test runs.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- CHALLENGES -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Problem Solving</div>
       <h2>What Went Wrong and How It Got Fixed</h2>
       <p>
         Both problems that emerged during testing were diagnosed methodically
-        and resolved — one through firmware, one through a hardware substitution
-        decision. Neither was a design failure; both were calibration and
-        compatibility issues that are entirely normal in a from-scratch build.
+        and resolved. One through firmware, one through a hardware substitution
+        decision.
       </p>
 
       <div class="challenges">
@@ -588,13 +543,13 @@
           <div class="challenge-text">
             <h4>Z-Axis Layer Height Miscalibration</h4>
             <p>
-              Early test prints came out visibly warped — layers were spaced too far
+              Early test prints came out visibly warped. Layers were spaced too far
               apart, causing the structure to lean and lose dimensional accuracy.
-              The root cause was incorrect <strong>steps-per-mm configuration</strong>
-              in Marlin for the Z-axis stepper motor: the firmware was advancing the
+              The root cause was in the steps per layer configuration
+              in Marlin for the Z-axis stepper motor. The firmware was advancing the
               bed by more distance per step than the lead screw geometry required.
-              Recalculating the correct steps-per-mm value from the motor's step
-              angle, microstepping settings, and lead screw pitch, then updating
+              Recalculating the correct steps/mm value from the motor's step
+              angle and lead screw pitch, then updating
               the Marlin configuration, resolved the issue completely.
             </p>
           </div>
@@ -609,14 +564,12 @@
             <h4>Extruder-Filament Temperature Mismatch</h4>
             <p>
               The initial extruder was a borrowed unit calibrated for engineering
-              filaments — running at temperatures significantly higher than standard
+              filaments running at temperatures significantly higher than standard
               PLA requires. The locally available PLA was over-melting: becoming too
               fluid to hold shape and slumping onto previous layers before setting.
               Rather than attempting to work around the temperature mismatch,
-              the decision was made to <strong>source a locally available hotend</strong>
-              rated for the correct PLA temperature range. This was the right
-              engineering call — identifying a specification incompatibility and
-              substituting the correct component rather than forcing a workaround.
+              the decision was made to source a locally available hotend
+              rated for the correct PLA temperature range.
             </p>
           </div>
         </div>
@@ -625,8 +578,7 @@
 
     <!-- SPECS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Specifications</div>
-      <h2>Build Summary</h2>
+      <h2>Specifications</h2>
       <table class="spec-table">
         <tr><td>Motion Architecture</td><td>CoreXY — fixed motors, moving head, Z-bed</td></tr>
         <tr><td>Frame</td><td>V-slot aluminum extrusions, cut and assembled from raw stock</td></tr>
@@ -642,47 +594,33 @@
 
     <!-- TAKEAWAYS -->
     <div class="content-section fade-up">
-      <div class="section-eyebrow">Takeaways</div>
-      <h2>What This Build Taught</h2>
+      <h2>Key Takeaways</h2>
       <div class="findings">
         <div class="finding-item">
           <div class="finding-icon">🔩</div>
           <div class="finding-text">
-            <h4>Mechanical Precision Has Downstream Consequences</h4>
+            <h4>The importance of mechanical precision</h4>
             <p>Frame squareness, belt tension, and rod alignment all compound.
             A small error at the frame stage shows up as print quality issues
-            at the end — the build process teaches you to work backwards from
-            the output to find the root cause.</p>
-          </div>
-        </div>
-        <div class="finding-item">
-          <div class="finding-icon">⚙️</div>
-          <div class="finding-text">
-            <h4>Firmware Is the Bridge Between Hardware and Intent</h4>
-            <p>Marlin configuration requires understanding the physical machine
-            at a component level — motor step angles, thermistor tables, PID
-            tuning. Getting the firmware right means understanding what the
-            hardware is actually doing, not just what it should do.</p>
+            at the end.</p>
           </div>
         </div>
         <div class="finding-item">
           <div class="finding-icon">💡</div>
           <div class="finding-text">
-            <h4>Constraints Drive Better Decisions</h4>
+            <h4>Constraints lead to better ideas</h4>
             <p>The budget constraint forced deliberate component selection and
-            creative problem-solving at every stage. Open-source tools aren't
-            a compromise — in this context they were the right choice on technical
-            grounds as much as financial ones.</p>
+            creative problem-solving at every stage. Everyone loves a challenge!
+            </p>
           </div>
         </div>
         <div class="finding-item">
           <div class="finding-icon">🔁</div>
           <div class="finding-text">
             <h4>Debugging Is an Engineering Skill</h4>
-            <p>Both problems that emerged — the layer height miscalibration and
-            the extruder mismatch — were solved by isolating variables, identifying
+            <p>Both problems that emerged were solved by isolating variables, identifying
             root causes, and applying the correct fix rather than patching symptoms.
-            That process is transferable to any engineering problem.</p>
+            That approach applies to any engineering problem.</p>
           </div>
         </div>
       </div>
