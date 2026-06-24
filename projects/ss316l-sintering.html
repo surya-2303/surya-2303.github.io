@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SS316L Metal 3D Printing & Sintering | Surya Ramachandran</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f0c;
+      --surface: #101510;
+      --surface2: #172019;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8c97a;
+      --accent2: #5aab6e;
+      --text: #e4ebe5;
+      --muted: #778a7a;
+      --tag-bg: rgba(90,171,110,0.12);
+      --tag-color: #5aab6e;
+      --tag-border: rgba(90,171,110,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(11,15,12,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-back {
+      font-size: 0.88rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent2); text-decoration: none; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 0.75rem 4rem;
+      font-size: 0.78rem; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-top: 64px;
+    }
+    .breadcrumb a { color: var(--muted); }
+    .breadcrumb a:hover { color: var(--accent2); text-decoration: none; }
+    .breadcrumb span { margin: 0 0.4rem; opacity: 0.4; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 4rem 4rem 3rem;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 90% 50%, rgba(90,171,110,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(232,201,122,0.05) 0%, transparent 60%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+    .tag-row {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .tag {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem; border-radius: 4px;
+      background: var(--tag-bg); color: var(--tag-color);
+      border: 1px solid var(--tag-border);
+    }
+    .tag.gold {
+      background: rgba(232,201,122,0.1);
+      color: var(--accent);
+      border-color: rgba(232,201,122,0.25);
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent2); }
+
+    .hero-sub {
+      font-size: 1rem; color: var(--muted); max-width: 640px;
+      line-height: 1.8; margin-bottom: 2.5rem;
+    }
+
+    .meta-strip {
+      display: flex; flex-wrap: wrap; gap: 2.5rem;
+      padding: 1.5rem 0 0;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item strong {
+      display: block; color: var(--muted);
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .meta-item span { font-size: 0.9rem; }
+
+    /* ── PIPELINE ── */
+    .pipeline-wrap {
+      padding: 2.5rem 4rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .pipeline-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+    }
+    .pipeline {
+      display: flex; align-items: stretch; gap: 0;
+      max-width: 680px;
+    }
+    .p-step {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 0.9rem 1rem; text-align: center;
+    }
+    .p-step:first-child { border-radius: 8px 0 0 8px; }
+    .p-step:last-child  { border-radius: 0 8px 8px 0; }
+    .p-step .s-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .p-step .s-name  { font-size: 0.88rem; font-weight: 600; margin-top: 0.2rem; }
+    .p-arrow { color: var(--muted); padding: 0 0.3rem; display: flex; align-items: center; font-size: 0.9rem; }
+    .p-step.lit { border-color: rgba(90,171,110,0.35); }
+    .p-step.lit .s-name { color: var(--accent2); }
+
+    /* ── CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 4rem 4rem; }
+    .content section { margin-bottom: 4rem; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .section-label::before {
+      content: ''; display: block; width: 16px; height: 1px; background: var(--accent);
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.15; margin-bottom: 1.25rem;
+    }
+    h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    p  { color: var(--muted); line-height: 1.85; margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 1.2rem; color: var(--muted); line-height: 1.85; }
+    li { margin-bottom: 0.3rem; }
+
+    .callout {
+      border-left: 2px solid var(--accent);
+      padding: 0.9rem 1.25rem;
+      margin: 1.5rem 0;
+      color: var(--muted); font-style: italic; font-size: 0.95rem;
+      background: rgba(232,201,122,0.04);
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* ── PARAM TABLE ── */
+    .param-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.88rem; margin-top: 1rem;
+    }
+    .param-table th, .param-table td {
+      padding: 0.7rem 1rem;
+      text-align: left; border: 1px solid var(--border);
+    }
+    .param-table th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 600;
+    }
+    .param-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+    .param-table td:nth-child(2) { color: var(--accent); font-weight: 600; }
+
+    /* ── STEP CARDS ── */
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem; }
+    .step-card {
+      display: flex; gap: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: var(--accent); opacity: 0.5;
+      min-width: 2rem; line-height: 1;
+    }
+    .step-body h3 { color: var(--text); margin-bottom: 0.4rem; }
+
+    /* ── SHRINKAGE ── */
+    .shrinkage-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+      margin-top: 1rem;
+    }
+    .shrink-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; text-align: center;
+    }
+    .shrink-axis {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.4rem; color: var(--accent); line-height: 1;
+    }
+    .shrink-pct {
+      font-size: 1.3rem; font-weight: 600; color: var(--text);
+      margin-top: 0.25rem;
+    }
+    .shrink-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* ── DEFECT CARDS ── */
+    .defect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .defect-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .defect-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 4px;
+      background: rgba(200,80,80,0.1); color: #d07070;
+      border: 1px solid rgba(200,80,80,0.2);
+      margin-bottom: 0.6rem;
+    }
+    .defect-card h3 { color: var(--text); }
+
+    /* ── FEA BOX ── */
+    .fea-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent2);
+      border-radius: 0 12px 12px 0;
+      padding: 1.5rem 1.75rem;
+      margin-top: 1rem;
+    }
+    .fea-box h3 { color: var(--accent2); margin-bottom: 0.6rem; }
+
+    /* ── TAKEAWAYS ── */
+    .takeaways { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .takeaway-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .takeaway-card .t-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .takeaway-card h3 { color: var(--text); font-size: 0.95rem; margin-bottom: 0.4rem; }
+
+    /* ── FOOTER NAV ── */
+    .footer-nav {
+      max-width: 860px; margin: 0 auto;
+      padding: 2rem 4rem 5rem;
+      display: flex; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .footer-nav a {
+      color: var(--muted); display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s; text-decoration: none;
+    }
+    .footer-nav a:hover { color: var(--accent2); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav, .breadcrumb, .hero, .pipeline-wrap, .footer-nav { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .content { padding: 3rem 1.5rem; }
+      .shrinkage-grid { grid-template-columns: 1fr; }
+      .defect-grid    { grid-template-columns: 1fr; }
+      .takeaways      { grid-template-columns: 1fr; }
+      .pipeline { flex-direction: column; max-width: 220px; }
+      .p-arrow { transform: rotate(90deg); justify-content: center; }
+      .p-step:first-child { border-radius: 8px 8px 0 0; }
+      .p-step:last-child  { border-radius: 0 0 8px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://surya-2303.github.io/index.html" class="nav-logo">SR</a>
+    <a href="https://surya-2303.github.io/index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="https://surya-2303.github.io/index.html">Home</a>
+    <span>/</span>
+    <a href="https://surya-2303.github.io/index.html#projects">Projects</a>
+    <span>/</span>
+    SS316L Metal 3D Printing &amp; Sintering
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content fade-up">
+      <div class="tag-row">
+        <span class="tag gold">Capstone Project</span>
+        <span class="tag">Metal Additive Manufacturing</span>
+        <span class="tag">Post-Processing</span>
+        <span class="tag">FEA</span>
+        <span class="tag">Team of 4</span>
+      </div>
+
+      <h1>Printing Metal —<br>Then Burning Away<br><em>Everything That Isn't</em></h1>
+
+      <p class="hero-sub">
+        FDM extrusion of SS316L stainless steel filament, followed by solvent debinding
+        and sintering at 1360 °C to produce fully metallic test specimens — evaluated
+        for shrinkage, porosity, microstructure, and structural behaviour.
+      </p>
+
+      <div class="meta-strip">
+        <div class="meta-item"><strong>Year</strong><span>2022 – 2023</span></div>
+        <div class="meta-item"><strong>Team</strong><span>4 Members</span></div>
+        <div class="meta-item"><strong>Institution</strong><span>CMR Institute of Technology</span></div>
+        <div class="meta-item"><strong>Tools</strong><span>CreatBot F430 · Markforged Metal X · ANSYS · SolidWorks</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROCESS PIPELINE -->
+  <div class="pipeline-wrap fade-up">
+    <p class="pipeline-label">Three-stage process</p>
+    <div class="pipeline">
+      <div class="p-step">
+        <div class="s-label">Stage 1</div>
+        <div class="s-name">FDM Print</div>
+      </div>
+      <span class="p-arrow">→</span>
+      <div class="p-step lit">
+        <div class="s-label">Stage 2</div>
+        <div class="s-name">Solvent Debind</div>
+      </div>
+      <span class="p-arrow">→</span>
+      <div class="p-step lit">
+        <div class="s-label">Stage 3</div>
+        <div class="s-name">Sintering</div>
+      </div>
+      <span class="p-arrow">→</span>
+      <div class="p-step">
+        <div class="s-label">Output</div>
+        <div class="s-name">Metal Part</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <main class="content">
+
+    <!-- motivation -->
+    <section class="fade-up">
+      <div class="section-label">Background</div>
+      <h2>The Question We Started With</h2>
+      <p>
+        Metal 3D printing is usually gated behind expensive powder-bed systems — SLM, EBM —
+        that require inert atmospheres, high-power lasers, and significant capital infrastructure.
+        This project asked whether you could use a standard filament-based FDM printer (the
+        kind normally used for plastics) to produce real metallic components, provided you
+        follow the print with solvent debinding and sintering.
+      </p>
+      <p>
+        SS316L was the material of choice: its corrosion resistance, biocompatibility, and
+        wide industrial use make it a meaningful target. The filament is a composite of
+        stainless steel powder suspended in a polymer binder — the FDM process forms the
+        geometry, and the two post-processing stages burn away the polymer and consolidate
+        the metal particles into a dense, fully metallic part.
+      </p>
+      <div class="callout">
+        Objective: investigate how layer thickness, infill density, and print speed influence
+        porosity and final part quality in FDM-printed SS316L — and characterize the result
+        after debinding and sintering.
+      </div>
+    </section>
+
+    <!-- printing -->
+    <section class="fade-up">
+      <div class="section-label">Stage 1</div>
+      <h2>3D Printing the Green Part</h2>
+      <p>
+        The printer was a <strong style="color:var(--text)">CreatBot F430</strong>, a
+        high-temperature FDM machine with a hardened nozzle capable of 420 °C — necessary
+        for metal-loaded filament. SS316L filament was sourced from NextGeneration 3D
+        Printers, Chennai.
+      </p>
+      <p>
+        Early prints at higher layer thicknesses and speeds came out badly: warping, layer
+        separation, and poor adhesion. Iterating through parameter combinations led to the
+        following optimized settings:
+      </p>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Parameter</th><th>Optimized Value</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Layer Thickness</td><td>0.15 mm</td><td>Initial 1 mm caused severe warping</td></tr>
+          <tr><td>Infill Density</td><td>100%</td><td>+ 120% flow rate on first 2 layers</td></tr>
+          <tr><td>Print Speed</td><td>30 mm/s</td><td>50 mm/s produced delamination</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:1.25rem;">
+        A non-obvious fix: the slicer at 100% infill would leave small voids at sharp
+        nozzle-turn corners. Boosting flow rate to <strong style="color:var(--text)">120%
+        for the first two layers</strong> closed those gaps without over-extruding the
+        rest of the part.
+      </p>
+      <p>
+        Specimens were designed in SolidWorks to <strong style="color:var(--text)">ASTM E8</strong>
+        (tensile) and <strong style="color:var(--text)">ASTM D790</strong> (flexural) standards,
+        plus two real-world geometry tests — an IKEA hook and a shelf bracket — to observe
+        how complex shapes behaved through the full process.
+      </p>
+    </section>
+
+    <!-- post-processing -->
+    <section class="fade-up">
+      <div class="section-label">Stages 2 &amp; 3</div>
+      <h2>Debinding and Sintering at TANSAM</h2>
+      <p>
+        The CMRIT lab lacked a controlled-atmosphere furnace — non-negotiable for
+        sintering metal parts, since oxidation at high temperature ruins the part.
+        The team sourced the facility from <strong style="color:var(--text)">TANSAM
+        (Tamil Nadu Smart and Advanced Manufacturing Centre)</strong>, which runs a
+        Markforged Metal X system.
+      </p>
+
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Solvent Debinding — Markforged Wash-1</h3>
+            <p>
+              Green parts were submerged in Opteon SF-79 solvent for
+              <strong style="color:var(--text)">16 hours at 120 °C</strong>.
+              The solvent dissolves the primary polymer binder while leaving the metal
+              powder network intact. Parts then dried for 4 hours. At this stage they
+              are called <em>brown parts</em> — fragile and porous, but holding geometry.
+            </p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Sintering — Markforged Sinter-2</h3>
+            <p>
+              Brown parts were loaded into the tube furnace under a
+              <strong style="color:var(--text)">97% Argon / 3% Hydrogen</strong>
+              controlled atmosphere. Temperature was ramped to
+              <strong style="color:var(--text)">1360 °C</strong> — within the optimal
+              1290–1370 °C window for SS316L — and held for
+              <strong style="color:var(--text)">16 hours</strong>. Metal powder particles
+              bond through atomic diffusion, eliminating porosity and producing a fully
+              metallic component.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- shrinkage -->
+    <section class="fade-up">
+      <div class="section-label">Results</div>
+      <h2>Shrinkage Analysis</h2>
+      <p>
+        Sintering consolidates porosity — which means the part physically shrinks.
+        Comparing CAD nominal dimensions against post-sinter measured averages revealed
+        anisotropic shrinkage across all three axes:
+      </p>
+
+      <div class="shrinkage-grid">
+        <div class="shrink-card">
+          <div class="shrink-axis">X</div>
+          <div class="shrink-pct">~17%</div>
+          <div class="shrink-label">Length axis</div>
+        </div>
+        <div class="shrink-card">
+          <div class="shrink-axis">Y</div>
+          <div class="shrink-pct">~13%</div>
+          <div class="shrink-label">Width axis</div>
+        </div>
+        <div class="shrink-card">
+          <div class="shrink-axis">Z</div>
+          <div class="shrink-pct">~21%</div>
+          <div class="shrink-label">Thickness axis</div>
+        </div>
+      </div>
+
+      <p style="margin-top:1.25rem;">
+        The Z-axis shrinkage being highest is consistent with layer-stacking: inter-layer
+        binder removal leaves more void volume in the build direction than in-plane.
+        These figures give a direct scaling factor for future designs — a part intended
+        to be 100 mm long should be modelled at ~117 mm before printing.
+      </p>
+    </section>
+
+    <!-- defects -->
+    <section class="fade-up">
+      <div class="section-label">Characterization</div>
+      <h2>Defects and Microstructure</h2>
+      <p>
+        Post-sinter optical microscopy (AX10, 10× and 50×) revealed two defect types.
+        SEM imaging at BMS College, Bengaluru confirmed that overall porosity had
+        reduced significantly after sintering, but not fully eliminated.
+      </p>
+
+      <div class="defect-grid">
+        <div class="defect-card">
+          <span class="defect-badge">Observed</span>
+          <h3>Layer Delamination</h3>
+          <p>Visible in flexural specimens at 10×. Layers had not fully bonded,
+          creating planar separations. Likely cause: insufficient inter-layer
+          adhesion during printing, amplified by anisotropic shrinkage stress
+          during sintering.</p>
+        </div>
+        <div class="defect-card">
+          <span class="defect-badge">Observed</span>
+          <h3>Surface Bubble Formation</h3>
+          <p>Found in tensile specimens at 50×. Indicative of residual binder
+          that didn't fully evacuate during debinding — trapped volatiles
+          expanding during the sintering thermal ramp. Points to binder
+          composition or debind cycle duration as the improvement lever.</p>
+        </div>
+      </div>
+
+      <p style="margin-top:1rem;">
+        Both defects were minor and didn't compromise the overall result — the
+        required post-processing was achieved. They do, however, mark two clear
+        paths for improvement in follow-on work.
+      </p>
+    </section>
+
+    <!-- FEA -->
+    <section class="fade-up">
+      <div class="section-label">Simulation</div>
+      <h2>FEA — Structural Behaviour</h2>
+      <div class="fea-box">
+        <h3>ANSYS Workbench — Static Structural</h3>
+        <p>
+          Tensile and compression tests were simulated using SS316L material properties.
+          Von Mises stress and strain distributions were computed across the gauge section
+          of the ASTM E8 specimens. Stress–strain curves from both load cases show elastic
+          behaviour up to approximately 275 MPa, consistent with literature values for
+          sintered SS316L — which typically falls below wrought or SLM equivalents due
+          to residual porosity.
+        </p>
+        <p>
+          The simulation established a theoretical performance baseline to compare against
+          physical test data once destructive testing is conducted — a standard validation
+          workflow for AM part qualification.
+        </p>
+      </div>
+    </section>
+
+    <!-- takeaways -->
+    <section class="fade-up">
+      <div class="section-label">Reflections</div>
+      <h2>Key Takeaways</h2>
+      <div class="takeaways">
+        <div class="takeaway-card">
+          <div class="t-icon">🔬</div>
+          <h3>FDM + sintering is viable for metal parts</h3>
+          <p>The process produced genuine stainless steel components at a fraction of
+          powder-bed fusion costs. The trade-off is tighter process control and
+          slightly lower final density.</p>
+        </div>
+        <div class="takeaway-card">
+          <div class="t-icon">📐</div>
+          <h3>Shrinkage must be designed in, not calibrated out</h3>
+          <p>Anisotropic shrinkage of 13–21% is predictable and consistent. Future
+          parts should apply axis-specific scale factors at the CAD stage before
+          printing.</p>
+        </div>
+        <div class="takeaway-card">
+          <div class="t-icon">⚗️</div>
+          <h3>Binder quality is the hidden variable</h3>
+          <p>Both observed defects trace back to the binder system, not the metal
+          powder or sintering conditions. Filament sourcing and shelf-life are
+          the practical levers to pull.</p>
+        </div>
+        <div class="takeaway-card">
+          <div class="t-icon">🏭</div>
+          <h3>Infrastructure constraints are an engineering problem too</h3>
+          <p>No controlled-atmosphere furnace on campus meant outsourcing to TANSAM.
+          Scoping around available infrastructure and building external partnerships
+          is real-world engineering.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER NAV -->
+  <div class="footer-nav fade-up">
+    <a href="https://surya-2303.github.io/index.html#projects">← Back to all projects</a>
+    <a href="https://surya-2303.github.io/index.html#contact">Get in touch →</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
